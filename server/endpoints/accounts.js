@@ -12,6 +12,7 @@ mongoose.Promise = require('bluebird');
 function createJWT(user) {
   var payload = {
     sub: user._id,
+    role: user.role,
     iat: moment().unix(),
     exp: moment().add(14, 'days').unix()
   };
@@ -34,7 +35,7 @@ module.exports = {
       user.displayName = req.body.displayName || user.displayName;
       user.email = req.body.email || user.email;
       user.save(function(err) {
-        res.status(200).end();
+      res.status(200).end();
       });
     });
   },

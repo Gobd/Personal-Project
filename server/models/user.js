@@ -1,6 +1,8 @@
 var mongoose = require('mongoose')
   , bcrypt = require('bcryptjs');
 
+GLOBAL.userRoles = ['user', 'brewer', 'root'];
+
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: { type: String, select: false },
@@ -8,7 +10,7 @@ var userSchema = new mongoose.Schema({
   picture: String,
   facebook: String,
   google: String,
-  role: { type: String, default: 'user', enum: ['user', 'brewer', 'employee'] }
+  role: { type: String, default: 'user', enum: userRoles }
 });
 
 userSchema.pre('save', function(next) {
