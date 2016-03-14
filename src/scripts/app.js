@@ -2,8 +2,6 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
 
   .config(function($authProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
 
-    $locationProvider.html5Mode(true);
-
     $authProvider.facebook({
       clientId: '1670205403245071'
     });
@@ -48,6 +46,11 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
       resolve: {
         loginRequired: loginRequired
       }
+    })
+    .state('test', {
+      url: '/test',
+      controller: 'homeCtrl',
+      templateUrl: 'partials/test.html'
     });
 
       function skipIfLoggedIn($q, $auth) {
