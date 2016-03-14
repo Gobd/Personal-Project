@@ -21,7 +21,7 @@ mongoose.connection.once('open', function() {
 });
 
 app.use(compression());
-app.use(express.static('../dist'));
+app.use(express.static('./dist'));
 app.use(cors());
 app.options('*', cors());
 app.use(bodyParser.json());
