@@ -1,0 +1,29 @@
+{
+  "name": "personal-big",
+  "description": "",
+  "main": "gulpfile.js",
+  "authors": [
+    "Brian Kemper <bkemper@gmail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "AngularJS": "angular-latest#^1.5.0",
+    "angular-ui-router": "^0.2.18",
+    "normalize-css": "normalize.css#^3.0.3",
+    "satellizer": "^0.14.0",
+    "angular-animate": "^1.5.0",
+    "angular-resource": "^1.5.0",
+    "angular-messages": "^1.5.0",
+    "angular-toastr": "^1.7.0"
+  }
+}
