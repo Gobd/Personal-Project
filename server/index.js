@@ -11,6 +11,7 @@ var express = require('express'),
   qs = require('querystring'),
   User = require('./models/user.js'),
   accounts = require('./endpoints/accounts.js'),
+  _ = require('lodash'),
   app = express();
 
 mongoose.connect('mongodb://localhost/personal');
@@ -36,7 +37,7 @@ app.post('/auth/google', accounts.postAuthGoogle);
 app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
 
-function checkRole(r){
+function checkRole(r) {
   return function(req, res, next) {
     var role = r;
     if (!req.header('Authorization')) {
@@ -53,14 +54,13 @@ function checkRole(r){
         message: err.message
       });
     }
-
     if (payload.exp <= moment().unix()) {
       return res.status(401).send({
         message: 'Token has expired'
       });
-    } else if (userRoles.indexOf(payload.role) >= userRoles.indexOf(role)) {
-          req.user = payload.sub;
-          next();
+    } else if (_(userRoles).indexOf(payload.role) >= _(userRoles).indexOf(role)) {
+      req.user = payload.sub;
+      next();
     } else {
       return res.status(401).send({
         message: 'Incorrect role'
