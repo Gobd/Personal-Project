@@ -74,6 +74,7 @@ module.exports = {
         });
       }
       var user = new User({
+        provider: 'Username & Password',
         displayName: req.body.displayName,
         email: req.body.email,
         password: req.body.password
@@ -125,9 +126,7 @@ module.exports = {
         }
         // Step 3a. Link user accounts.
         if (req.header('Authorization')) {
-          User.findOne({
-            google: profile.sub
-          }, function(err, existingUser) {
+          User.findOne({ google: profile.sub }, function(err, existingUser) {
             if (existingUser) {
               return res.status(409).send({
                 message: 'There is already a Google account that belongs to you'
@@ -141,6 +140,7 @@ module.exports = {
                   message: 'User not found'
                 });
               }
+              user.provider = 'Google';
               user.google = profile.sub;
               user.email = profile.email;
               user.picture = user.picture || profile.picture.replace('sz=50', 'sz=200');
@@ -155,25 +155,29 @@ module.exports = {
           });
         } else {
           // Step 3b. Create a new user account or return an existing one.
-          User.findOne({
-            google: profile.sub
-          }, function(err, existingUser) {
+          User.findOne({email: profile.email}, function(err, existingUser) {
             if (existingUser) {
-              return res.send({
-                token: createJWT(existingUser)
+                if (existingUser.provider === 'Google') {
+                  return res.send({
+                    token: createJWT(existingUser)
+                  });
+                } else if  (existingUser.provider === 'Facebook' || existingUser.provider === 'Username & Password') {
+                  return res.status(400).send({message: 'You already have a ' + existingUser.provider + ' Account'});
+                }
+            } else {
+              var user = new User();
+              user.provider = 'Google';
+              user.google = profile.sub;
+              user.email = profile.email;
+              user.picture = profile.picture.replace('sz=50', 'sz=200');
+              user.displayName = profile.name;
+              user.save(function(err) {
+                var token = createJWT(user);
+                res.send({
+                  token: token
+                });
               });
             }
-            var user = new User();
-            user.google = profile.sub;
-            user.email = profile.email;
-            user.picture = profile.picture.replace('sz=50', 'sz=200');
-            user.displayName = profile.name;
-            user.save(function(err) {
-              var token = createJWT(user);
-              res.send({
-                token: token
-              });
-            });
           });
         }
       });
@@ -215,9 +219,7 @@ module.exports = {
           });
         }
         if (req.header('Authorization')) {
-          User.findOne({
-            facebook: profile.id
-          }, function(err, existingUser) {
+          User.findOne({ facebook: profile.id }, function(err, existingUser) {
             if (existingUser) {
               return res.status(409).send({
                 message: 'There is already a Facebook account that belongs to you'
@@ -231,6 +233,7 @@ module.exports = {
                   message: 'User not found'
                 });
               }
+              user.provider = 'Facebook';
               user.facebook = profile.id;
               user.email = profile.email;
               user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
@@ -245,16 +248,18 @@ module.exports = {
           });
         } else {
           // Step 3. Create a new user account or return an existing one.
-          User.findOne({
-            facebook: profile.id
-          }, function(err, existingUser) {
+          User.findOne({email: profile.email}, function(err, existingUser) {
             if (existingUser) {
-              var token = createJWT(existingUser);
-              return res.send({
-                token: token
-              });
-            }
+                if (existingUser.provider === 'Facebook') {
+                  return res.send({
+                    token: createJWT(existingUser)
+                  });
+                } else if  (existingUser.provider === 'Google' || existingUser.provider === 'Username & Password') {
+                  return res.status(400).send({message: 'You already have a ' + existingUser.provider + ' Account'});
+                }
+            } else {
             var user = new User();
+            user.provider = 'Facebook';
             user.facebook = profile.id;
             user.email = profile.email;
             user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
@@ -265,6 +270,7 @@ module.exports = {
                 token: token
               });
             });
+          }
           });
         }
       });
