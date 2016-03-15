@@ -11,14 +11,8 @@ var express = require('express'),
   qs = require('querystring'),
   User = require('./models/user.js'),
   accounts = require('./endpoints/accounts.js'),
-  _ = require('lodash'),
-  geocoderProvider = 'google',
-  httpAdapter = 'https',
-  extra = {
-    apiKey: config.maps
-  },
   geolocation = require('./endpoints/geolocation.js'),
-  geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
+  _ = require('lodash'),
   app = express();
 
 mongoose.connect('mongodb://localhost/personal');
