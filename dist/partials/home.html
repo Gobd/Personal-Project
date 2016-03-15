@@ -7,3 +7,9 @@ Here's the home template
   <input type="text" ng-model="address" placeholder="Search...">
   <button type="submit">Search</button>
 </form>
+
+<form name="AddLocForm" ng-submit="add(brewery)">
+  <input type="text" ng-model="brewery.name" placeholder="Name...">
+  <input type="text" ng-model="brewery.address" placeholder="Address...">
+  <button type="submit">Add Brewery</button>
+</form>

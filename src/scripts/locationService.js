@@ -33,4 +33,12 @@ angular.module('app')
           });
         };
 
+        this.addBrewery = function(brewery){
+          return $http({
+            method: 'POST',
+            data: brewery,
+            url: 'http://localhost:3001/addBrewery'
+          });
+        };
+
   });

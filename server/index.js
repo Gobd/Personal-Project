@@ -43,6 +43,7 @@ app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
 
 app.get('/distance', geolocation.getDistance);
+app.post('/addBrewery', geolocation.addBrewry);
 
 function checkRole(r) {
   return function(req, res, next) {
