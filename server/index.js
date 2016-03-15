@@ -12,6 +12,13 @@ var express = require('express'),
   User = require('./models/user.js'),
   accounts = require('./endpoints/accounts.js'),
   _ = require('lodash'),
+  geocoderProvider = 'google',
+  httpAdapter = 'https',
+  extra = {
+    apiKey: config.maps
+  },
+  geolocation = require('./endpoints/geolocation.js'),
+  geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
   app = express();
 
 mongoose.connect('mongodb://localhost/personal');
@@ -36,26 +43,8 @@ app.post('/auth/signup', accounts.postAuthSignup);
 app.post('/auth/google', accounts.postAuthGoogle);
 app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
-
-app.get('/getAddress', function(req, res, next){
-  request('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + req.query.lat + ',' + req.query.long + '&key=' + config.maps, function(err, resp, body){
-      if (!err && resp.statusCode === 200) {
-        var parse = JSON.parse(body);
-        var ret = parse.results[0].formatted_address;
-        res.status(200).json(ret);
-      }
-  });
-});
-
-app.get('/getCoords', function(req, res, next){
-  request('https://maps.googleapis.com/maps/api/geocode/json?address=' + req.query.address + '&key=' + config.maps, function(err, resp, body){
-      if (!err && resp.statusCode === 200) {
-        var parse = JSON.parse(body);
-        var ret = parse.results[0].geometry.location;
-        res.status(200).json(ret);
-      }
-  });
-});
+app.get('/getAddress', geolocation.getAddress);
+app.get('/getCoords', geolocation.getCoords);
 
 function checkRole(r) {
   return function(req, res, next) {

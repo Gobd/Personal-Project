@@ -1,5 +1,5 @@
 angular.module('app')
-  .service('locationFinder', function($http, $q) {
+  .service('locationService', function($http, $q) {
 
     function geolocator(){
             var deferred = $q.defer();
