@@ -5,11 +5,11 @@ angular.module('app')
       //   $scope.respCoords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
       //   $scope.address = res.data[0].city + ', ' + res.data[0].administrativeLevels.level1short;
       // });
-      //
-      // $scope.searchByAddress = function(address){
-      //   locationService.searchByAddress(address).then(function(res){
-      //     $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
-      //   });
-      // };
+
+      $scope.searchByAddress = function(address){
+        locationService.searchByAddress(address).then(function(res){
+          $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
+        });
+      };
 
   });

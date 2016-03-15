@@ -15,6 +15,8 @@ var express = require('express'),
   _ = require('lodash'),
   app = express();
 
+mongoose.Promise = require('bluebird');
+
 mongoose.connect('mongodb://localhost/personal');
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() {
@@ -39,6 +41,8 @@ app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
+
+app.get('/distance', geolocation.getDistance);
 
 function checkRole(r) {
   return function(req, res, next) {
