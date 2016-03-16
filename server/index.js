@@ -13,6 +13,7 @@ var express = require('express'),
   accounts = require('./endpoints/accounts.js'),
   geolocation = require('./endpoints/geolocation.js'),
   _ = require('lodash'),
+  helmet = require('helmet'),
   app = express();
 
 mongoose.Promise = require('bluebird');
@@ -23,6 +24,7 @@ mongoose.connection.once('open', function() {
   console.log('Connected to MongoDB!');
 });
 
+app.use(helmet());
 app.use(compression());
 app.use(express.static('./dist'));
 app.use(cors());
