@@ -1,0 +1,16 @@
+{
+  "restartable": "rs",
+  "verbose": true,
+  "ignore": [
+    ".git",
+    "node_modules/**",
+    "bower_components/**"
+  ],
+  "execMap" : {
+    "js":  "node --trace-sync-io"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js"
+}
