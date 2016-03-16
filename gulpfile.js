@@ -37,6 +37,7 @@ gulp.task('stylus', function(){
 });
 
 gulp.task('bowerCss', function(){
+  console.log(mainBowerFiles());
   gulp.src(mainBowerFiles('**/*.css'))
   .pipe(sourcemaps.init())
   .pipe(cleanCSS())
