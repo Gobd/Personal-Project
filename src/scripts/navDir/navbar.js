@@ -1,5 +1,5 @@
 angular.module('app')
-  .controller('NavbarCtrl', function($scope, $auth, locationService) {
+  .controller('NavbarCtrl', function($scope, $auth, locationService, $location, $rootScope) {
 
     $scope.isAuthenticated = function() {
       return $auth.isAuthenticated();
@@ -10,6 +10,23 @@ angular.module('app')
     //   $scope.search = {};
     //   $scope.search.location = res.data[0].city + ', ' + res.data[0].administrativeLevels.level1short;
     // });
+
+    $rootScope.$on('$locationChangeSuccess', function () {
+      console.log('func');
+        if (!isEmpty($location.search())) {
+            $scope.getBrewery($location.search());
+        }
+    });
+
+    if (!isEmpty($location.search())) {
+        locationService.getBrewery($location.search()).then(function(res){
+          $scope.brewery = res.data;
+        });
+    } else {
+      locationService.getBrewery().then(function(res){
+        $scope.brewery = res.data;
+      });
+    }
 
     $scope.getBrewery = function(brewery){
       locationService.getBrewery(brewery).then(function(res){
@@ -27,10 +44,8 @@ angular.module('app')
       console.log(brewery);
     };
 
-    if (!$scope.results){
-      locationService.getBrewery().then(function(res){
-        $scope.brewery = res.data;
-      });
+    function isEmpty(obj) {
+      if (Object.keys(obj).length === 0) {return true;} else {return false;}
     }
 
   });

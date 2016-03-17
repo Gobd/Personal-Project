@@ -40,7 +40,7 @@ module.exports = {
  getBrewery : function(req, res, next){
    var breweryPromise;
    if (Object.keys(req.query).length) {
-     breweryPromise = Loc.find({name: req.query.brewery});
+     breweryPromise = Loc.find({name: req.query.name});
      breweryPromise.then(function(resp){
        res.status(200).json(resp);
      });

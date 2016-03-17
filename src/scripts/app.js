@@ -10,11 +10,11 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
       clientId: '696255640250-ha91c7enlsravhptab5c63punfunlh8u.apps.googleusercontent.com'
     });
 
-    $urlRouterProvider.otherwise("/home");
+    $urlRouterProvider.otherwise("/");
 
     $stateProvider
     .state('home', {
-      url: '/',
+      url: '/:name:beer:near',
       controller: 'homeCtrl',
       templateUrl: 'partials/home.html'
     })
