@@ -1,9 +1,5 @@
 angular.module('app')
-  .controller('NavbarCtrl', function($scope, $auth, locationService, $location, $rootScope) {
-
-    $scope.isAuthenticated = function() {
-      return $auth.isAuthenticated();
-    };
+  .controller('searchDirCtrl', function($scope, locationService, $location, $rootScope) {
 
     locationService.getAddressFromCoords().then(function(res){
       $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
