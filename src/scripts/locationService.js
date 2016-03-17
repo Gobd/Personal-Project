@@ -41,4 +41,12 @@ angular.module('app')
           });
         };
 
+        this.getBrewery = function(brewery){
+          return $http({
+            method: 'GET',
+            params: brewery,
+            url: 'http://localhost:3001/getBrewery'
+          });
+        };
+
   });

@@ -1,15 +1,5 @@
-Here's the home template
+<nav-dir brewery="breweries"></nav-dir>
 
-<br/>coords : {{coords}}
-<br/>address : {{address}}
-
-<form name="searchForm" ng-submit="searchByAddress(address)">
-  <input type="text" ng-model="address" placeholder="Get coords by address...">
-  <button type="submit">Search</button>
-</form>
-
-<form name="AddLocForm" ng-submit="add(brewery)">
-  <input type="text" ng-model="brewery.name" placeholder="Name...">
-  <input type="text" ng-model="brewery.address" placeholder="Address...">
-  <button type="submit">Add Brewery</button>
-</form>
+<div ng-repeat="brewery in breweries">
+  {{brewery.name}} ---- {{brewery.address || 'No address available'}}
+</div>

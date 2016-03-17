@@ -37,6 +37,21 @@ module.exports = {
      });
  },
 
+ getBrewery : function(req, res, next){
+   var breweryPromise;
+   if (Object.keys(req.query).length) {
+     breweryPromise = Loc.find({name: req.query.brewery});
+     breweryPromise.then(function(resp){
+       res.status(200).json(resp);
+     });
+   } else {
+     breweryPromise = Loc.find({});
+     breweryPromise.then(function(resp){
+       res.status(200).json(resp);
+     });
+   }
+ },
+
  getDistance : function(req, res, next){
    var locPromise = Loc.findOne({name: "2 row"});
    locPromise.then(function(resp){

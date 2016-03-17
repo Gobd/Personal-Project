@@ -42,6 +42,7 @@ app.post('/auth/google', accounts.postAuthGoogle);
 app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
 
+app.get('/getBrewery', geolocation.getBrewery);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
 app.get('/distance', geolocation.getDistance);
