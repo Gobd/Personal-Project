@@ -9,28 +9,28 @@
 </head>
 <body ng-cloak>
 
+<div class="cont">
   <div ng-controller="NavbarCtrl" id="topBar">
-
   <ul id="topBar1">
     <li><a href="/#/">Home</a></li>
-  </ul>
-
-    <form id="topBar2" name="searchForm" ng-model="search" ng-submit="searchDb()">
-        <input class="form-control 1" type="text" ng-model="search.brewery" placeholder="Search by brewery...">
-        <input class="form-control 2" type="text" ng-model="search.beer" placeholder="Search by beer...">
-        <input class="form-control 3" type="text" ng-model="search.location" placeholder="Search by location...">
-        <button class="btn btn-default" type="submit">Search</button>
-    </form>
-
-  <ul id="topBar3">
     <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
   </ul>
+    <form id="topBar2" name="searchForm" ng-model="search" ng-submit="searchDb()">
+        <input class="form-control" type="text" ng-model="search.brewery" placeholder="Search by brewery...">
+        <input class="form-control" type="text" ng-model="search.beer" placeholder="Search by beer...">
+        <label for="location">Near: </label>
+        <input id="location" class="form-control" name="location" type="text" ng-model="search.location">
+        <button class="btn btn-default" type="submit">Search</button>
+    </form>
+</div>
 </div>
 
-<ui-view></ui-view>
+<div>
+  <ui-view></ui-view>
+</div>
 
   <script src="js/lib.min.js"></script>
   <script src="js/js.min.js"></script>
