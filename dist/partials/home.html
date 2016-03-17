@@ -1,5 +1,5 @@
 <nav-dir brewery="breweries"></nav-dir>
 
-<div ng-repeat="brewery in breweries">
+<div ng-click="breweryDetails(brewery)" ng-repeat="brewery in breweries">
   {{brewery.name}} ---- {{brewery.address || 'No address available'}}
 </div>

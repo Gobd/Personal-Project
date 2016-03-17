@@ -13,7 +13,7 @@ angular.module('app')
 
     $scope.getBrewery = function(brewery){
       locationService.getBrewery(brewery).then(function(res){
-        $scope.results = res.data;
+        $scope.brewery = res.data;
       });
     };
 

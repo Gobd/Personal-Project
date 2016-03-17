@@ -1,21 +1,24 @@
-<div>
-    <div class="cont">
-      <div id="topBar">
-      <ul id="topBar1">
-        <li><a href="/#/"><img src="beer.png"></a></li>
-        <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
-        <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
-        <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-        <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
-        <li ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
-      </ul>
-        <form id="topBar2" name="searchForm" ng-model="search" ng-submit="getBrewery(search)">
-            <input class="form-control" type="text" ng-model="search.brewery" placeholder="Search by brewery...">
-            <input class="form-control" type="text" ng-model="search.beer" placeholder="Search by beer...">
-            <label for="location">Near: </label>
-            <input id="location" class="form-control" name="location" type="text" ng-model="search.location">
-            <button class="btn btn-default" type="submit">Search</button>
-        </form>
-    </div>
-    </div>
+<div class="cont">
+
+<div id="search">
+  <form name="searchForm" ng-model="search" ng-submit="getBrewery(search)">
+      <input class="form-control" type="text" ng-model="search.brewery" placeholder="Search by brewery...">
+      <input class="form-control" type="text" ng-model="search.beer" placeholder="Search by beer...">
+      <label for="location">Near: </label>
+      <input id="location" class="form-control" name="location" type="text" ng-model="search.location">
+      <button class="btn btn-default" type="submit">Search</button>
+  </form>
+</div>
+
+<div id="nav">
+  <ul>
+    <li><a href="/#/"><img src="beer.png"></a></li>
+    <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
+    <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
+    <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
+    <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
+    <li ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
+  </ul>
+</div>
+
 </div>

@@ -31,51 +31,47 @@ h4
   margin-top 15px
   text-align center
 
+body
+  padding 15px
 .cont
-  margin-top 25px
-  max-width 1200px
-  margin-left auto
-  margin-right auto
+  margin-top 15px
   display flex
-  justify-content center
-  #topBar
-    display flex
-    align-items center
-    margin-bottom 35px
-    col(1)
-    #topBar1
-      img
-        width 46px
-      margin 0 0 0 15px
-      list-style-type none
-      col(1/4 1)
-      min-width 125px
-    #topBar2
-      col(3/4 1)
-      display inline-block
-      +below(800px)
-        width 68%
-      label
-        position abolute
-        transform translateX(16px)
-        +below(800px)
-          transform translate(16px, 7px)
-      #location
-        padding-left 56px
-        margin-left -39px
-        +below(800px)
-          margin-top -25px
-          margin-left 0px
-      button
-        width 80px
-        display inline-block
-        +below(800px)
-          margin auto
-          display block
+  flex-direction column
+  max-width 1000px
+  margin 0 auto
+  #search
+    form
+      display flex
+      justify-content space-around
+      width 100%
+      +below(625px)
+        display block
       input
-        display inline-block
-        width 26%
-        +below(800px)
-          margin-bottom 10px
+        width 28%
+        margin-right 15px
+        +below(625px)
           width 100%
-          display block
+      label
+        position absolute
+        transform translate(12px, 7px)
+      #location
+        padding-left 52px
+      button
+        display block
+        width 70px
+        +below(625px)
+          margin 0 auto
+  #nav
+    padding-top 15px
+    display flex
+    justify-content center
+    ul
+      padding 0
+      list-style-type none
+      img
+        height 50px
+        transform rotate(90deg)
+      li
+        display inline-block
+        &:not(:first-child)
+          padding-left 25px
