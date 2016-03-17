@@ -13,9 +13,11 @@ const
 , postcss = require('gulp-postcss')
 , autoprefixer = require('autoprefixer')
 , mocha = require('gulp-mocha')
-, jeet = require("jeet")
+, jeet = require('jeet')
 , nodemon = require('nodemon')
-, processors = [autoprefixer()];
+, rupture = require('rupture')
+, processors = [autoprefixer()]
+, bootstrap = require('bootstrap-styl');
 
 gulp.task('server', function(){
   gulp.src('./dist')
@@ -28,20 +30,19 @@ gulp.task('server', function(){
 gulp.task('stylus', function(){
   gulp.src('./src/styles/*.styl')
   .pipe(sourcemaps.init())
-  .pipe(stylus({use: [jeet()]}))
-  .pipe(cleanCSS())
+  .pipe(stylus({use: [jeet(), bootstrap(), rupture()]}))
   .pipe(postcss(processors))
+  .pipe(cleanCSS())
   .pipe(concat('css.min.css'))
   .pipe(sourcemaps.write('/maps'))
   .pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('bowerCss', function(){
-  console.log(mainBowerFiles());
   gulp.src(mainBowerFiles('**/*.css'))
   .pipe(sourcemaps.init())
-  .pipe(cleanCSS())
   .pipe(postcss(processors))
+  .pipe(cleanCSS())
   .pipe(concat('lib.min.css'))
   .pipe(sourcemaps.write('/maps'))
   .pipe(gulp.dest('./dist/css'));

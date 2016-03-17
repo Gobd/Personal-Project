@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="css/lib.min.css">
   <link rel="stylesheet" type="text/css" href="css/css.min.css">
   <meta charset="UTF-8">
@@ -8,18 +9,24 @@
 </head>
 <body ng-cloak>
 
-  <div ng-controller="NavbarCtrl">
+  <div ng-controller="NavbarCtrl" id="topBar">
 
-  <ul>
+  <ul id="topBar1">
     <li><a href="/#/">Home</a></li>
+  </ul>
+
+    <form id="topBar2" name="searchForm" ng-model="search" ng-submit="searchDb()">
+        <input class="form-control 1" type="text" ng-model="search.brewery" placeholder="Search by brewery...">
+        <input class="form-control 2" type="text" ng-model="search.beer" placeholder="Search by beer...">
+        <input class="form-control 3" type="text" ng-model="search.location" placeholder="Search by location...">
+        <button class="btn btn-default" type="submit">Search</button>
+    </form>
+
+  <ul id="topBar3">
+    <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
+    <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-  </ul>
-  <ul ng-if="!isAuthenticated()">
-    <li><a href="/#/login">Login</a></li>
-    <li><a href="/#/signup">Sign up</a></li>
-  </ul>
-  <ul ng-if="isAuthenticated()">
-    <li><a href="/#/logout">Logout</a></li>
+    <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
   </ul>
 </div>
 
