@@ -4,8 +4,6 @@ return {
       replace: 'true',
       templateUrl: './partials/Directives/searchDir.html',
       controller: 'searchDirCtrl',
-      scope: {
-        brewery: '='
-      }
+      scope: {brewery: '=', search: '='}
   };
 });

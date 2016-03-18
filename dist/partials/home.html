@@ -1,6 +1,10 @@
-<search-dir brewery="breweries"></search-dir>
-<nav-dir></nav-dir>
+<search-dir brewery="breweries" search="search"></search-dir>
+<nav-dir brewery="breweries" search="search"></nav-dir>
 
 <div ng-click="breweryDetails(brewery)" ng-repeat="brewery in breweries">
   {{brewery.name}} ---- {{brewery.address || 'No address available'}}
+</div>
+
+<div ng-if="!search.location">
+    Waiting on location
 </div>

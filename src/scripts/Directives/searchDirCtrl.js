@@ -1,29 +1,17 @@
 angular.module('app')
-  .controller('searchDirCtrl', function($scope, locationService, $location, $rootScope) {
+  .controller('searchDirCtrl', function($scope, locationService, $location) {
 
-    locationService.getAddressFromCoords().then(function(res){
-      $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
-      if (!$scope.search) {$scope.search = {};}
-      $scope.search.location = res.data[0].city + ', ' + res.data[0].administrativeLevels.level1short;
-    });
-
-    $rootScope.$on('$locationChangeSuccess', function () {
-        if (!isEmpty($location.search())) {
-            locationService.getBrewery($location.search()).then(function(res){
-              $scope.brewery = res.data;
-            });
-        } else {
-          locationService.getBrewery().then(function(res){
+    function firstLoadSearch(){
+        locationService.getAddressFromCoords().then(function(res){
+            $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
             $scope.search = {};
-            $scope.brewery = res.data;
-          });
-        }
-    });
+            $scope.search.location = res.data[0].city + ', ' + res.data[0].administrativeLevels.level1short;
+            $scope.getBrewery($scope.search);
+        });
+    }
 
     if (isEmpty($location.search())) {
-        locationService.getBrewery().then(function(res){
-          $scope.brewery = res.data;
-        });
+        firstLoadSearch();
     } else {
         locationService.getBrewery($location.search()).then(function(res){
           $scope.search = $location.search();
@@ -48,7 +36,7 @@ angular.module('app')
     };
 
     function isEmpty(obj) {
-      if (Object.keys(obj).length === 0) {return true;} else {return false;}
+      return (Object.keys(obj).length === 0)
     }
 
   });

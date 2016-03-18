@@ -39,6 +39,7 @@ module.exports = {
 
  getBrewery : function(req, res, next){
    var breweryPromise;
+     delete req.query.location;
    if (Object.keys(req.query).length) {
      breweryPromise = Loc.find({name: req.query.name});
      breweryPromise.then(function(resp){

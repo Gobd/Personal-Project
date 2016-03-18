@@ -2,7 +2,7 @@
 
 <div id="nav">
   <ul>
-    <li><a href="/#/"><img src="beer.png"></a></li>
+    <li><a href="/#/" ng-click="goHome()"><img src="beer.png"></a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>

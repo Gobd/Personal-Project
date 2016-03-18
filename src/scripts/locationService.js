@@ -14,7 +14,7 @@ angular.module('app')
     }
 
     this.getAddressFromCoords = function() {
-      var ret = geolocator().then(function(position) {
+      return geolocator().then(function(position) {
         return $http({
           method: 'GET',
           params: {
@@ -24,7 +24,6 @@ angular.module('app')
           url: 'http://localhost:3001/getAddress'
         });
       });
-      return ret;
     };
 
     this.searchByAddress = function(address) {
@@ -49,7 +48,9 @@ angular.module('app')
       if (brewery) {
         var url = '?';
         for (var key in brewery) {
-          url += key + "=" + brewery[key] + '&';
+            if(brewery.hasOwnProperty(key)) {
+                url += key + "=" + brewery[key] + '&';
+            }
         }
         $location.url(url.slice(0, url.length - 1));
         return $http({
