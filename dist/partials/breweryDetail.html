@@ -3,12 +3,8 @@
 <div ng-repeat="beer in detail.beers">
     <a href="/#/reviewBeer/{{beer._id}}">{{beer.name}}</a> --- {{beer.srm}} --- {{beer.ibu}}
         <div ng-repeat="review in beer.reviews">
-            {{review.userId}} --- {{review.review}}
+            {{review.userId.displayName}} --- {{review.review}}
         </div>
 </div>
-
-<br><br>
-{{detail.beers}}
-<br><br>
 
 <a href="/#/addBeer/{{detail._id}}">Add Beer</a>
