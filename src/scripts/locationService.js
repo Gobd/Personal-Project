@@ -1,7 +1,7 @@
 angular.module('app')
   .service('locationService', function($http, $q, $location) {
 
-    function geolocator() {
+    function geoLocation() {
       var deferred = $q.defer();
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -14,7 +14,7 @@ angular.module('app')
     }
 
     this.getAddressFromCoords = function() {
-      return geolocator().then(function(position) {
+      return geoLocation().then(function(position) {
         return $http({
           method: 'GET',
           params: {

@@ -9,7 +9,7 @@ return {
               return $auth.isAuthenticated();
             };
           $scope.goHome = function(){
-              locationService.getBrewery({}).then(function(res){
+              locationService.getBrewery().then(function(res){
                   $scope.brewery = res.data;
                   $scope.search.name = '';
                   $scope.search.beer = '';
