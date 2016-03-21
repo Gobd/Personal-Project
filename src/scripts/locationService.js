@@ -44,15 +44,16 @@ angular.module('app')
       });
     };
 
+      this.breweryDetail = function(id) {
+          return $http({
+              method: 'GET',
+              url: 'http://localhost:3001/breweryDetail/' + id
+          });
+      };
+
     this.getBrewery = function(brewery) {
       if (brewery) {
-        var url = '?';
-        for (var key in brewery) {
-            if(brewery.hasOwnProperty(key)) {
-                url += key + "=" + brewery[key] + '&';
-            }
-        }
-        $location.url(url.slice(0, url.length - 1));
+          $location.url("/home").search(brewery);
         return $http({
           method: 'GET',
           params: brewery,

@@ -43,6 +43,7 @@ app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
 
 app.get('/getBrewery', geolocation.getBrewery);
+app.get('/breweryDetail/:id', geolocation.breweryDetail);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
 app.post('/addBrewery', geolocation.addBrewry);

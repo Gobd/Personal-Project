@@ -77,6 +77,12 @@ module.exports = {
         }
     },
 
+    breweryDetail: function(req, res, next){
+        Loc.findById(req.params.id, function(err, resp){
+            res.status(200).json(resp);
+        })
+    },
+
     addBrewry: function (req, res, next) {
         Loc.create(req.body);
         res.status(200).json(req.body);
