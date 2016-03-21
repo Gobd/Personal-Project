@@ -47,6 +47,7 @@ app.get('/breweryDetail/:id', geolocation.breweryDetail);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
 app.post('/addBrewery', geolocation.addBrewry);
+app.post('/addBeer', geolocation.addBeer);
 
 function checkRole(r) {
   return function(req, res, next) {

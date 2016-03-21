@@ -16,6 +16,7 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
     .state('home', {
       url: '/home:name?/:beer?/:near?',
       controller: 'homeCtrl',
+        notify: false,
       templateUrl: 'partials/home.html'
     })
     .state('login', {

@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
-var beerModel = require('./beer.js');
+var beer = require('./beer.js');
+var beerModel = beer.model;
 
 var locationSchema = new mongoose.Schema({
   name: String,
   address: String,
-  beers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'beerModel' }],
+  beers: [String],
   loc: {
     type: {type: String, enum: "Point", default: "Point"},
     coordinates: [Number]

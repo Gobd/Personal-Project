@@ -4,10 +4,11 @@ var geocoderProvider = 'google',
     extra = {apiKey: config.maps},
     geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra),
     Loc = require('../models/location.js'),
-    _ = require('lodash')
-    , mongoose = require('mongoose');
-
-mongoose.Promise = require('bluebird');
+    _ = require('lodash'),
+    beer = require('../models/beer.js'),
+    beerModel = beer.model,
+    mongoose = require('mongoose'),
+    Promise = require('bluebird');
 
 function distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
@@ -86,6 +87,17 @@ module.exports = {
     addBrewry: function (req, res, next) {
         Loc.create(req.body);
         res.status(200).json(req.body);
-    }
+    },
 
+    addBeer: function(req, res, next) {
+        var breweryId = req.body.brewery;
+        beerModel.create(req.body, function(err, resp){
+            if (err) {res.status(500).json(err)} else {
+                var beerId = resp._id;
+                Loc.findByIdAndUpdate(breweryId, {$push: {beers: beerId}}, function(err, resp){
+                    res.status(200).json(resp);
+                })
+            }
+        });
+    }
 };

@@ -5,7 +5,11 @@ var beerSchema = new mongoose.Schema({
     name: String,
     srm: Number,
     ibu: Number,
+    brewery: String,
     reviews: [reviewSchema]
 });
 
-module.exports = mongoose.model('beer', beerSchema);
+module.exports = {
+    model: mongoose.model('beer', beerSchema),
+    schema: beerSchema
+};

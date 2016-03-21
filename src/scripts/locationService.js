@@ -44,6 +44,14 @@ angular.module('app')
       });
     };
 
+      this.addBeer = function(beerToAdd) {
+          return $http({
+              method: 'POST',
+              data: beerToAdd,
+              url: 'http://localhost:3001/addBeer'
+          });
+      };
+
       this.breweryDetail = function(id) {
           return $http({
               method: 'GET',
