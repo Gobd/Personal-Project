@@ -2,7 +2,7 @@
 <nav-dir brewery="breweries" search="search"></nav-dir>
 
 <div ng-click="breweryDetails(brewery)" ng-repeat="brewery in breweries">
-  {{brewery.name}} ---- {{brewery.address || 'No address available'}}
+  {{brewery.name}} ---- {{brewery.address || 'No address available'}} ---- {{brewery.distance}} Miles
 </div>
 
 <div ng-if="!search.location">

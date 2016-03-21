@@ -16,7 +16,7 @@ function distance(lat1, lon1, lat2, lon2) {
         c(lat1 * p) * c(lat2 * p) *
         (1 - c((lon2 - lon1) * p)) / 2;
 
-    return 12742 * Math.asin(Math.sqrt(a));
+    return 7917.5117 * Math.asin(Math.sqrt(a));
 }
 
 var milesToMeters = function (miles) {
@@ -67,7 +67,7 @@ module.exports = {
             var distPromise = Loc.find(query).lean();
             distPromise.then(function (resp) {
                 _(resp).forEach(function (obj, idx) {
-                    dist = distance(location[0], location[1], obj.loc.coordinates[0], obj.loc.coordinates[1]);
+                    dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
                     obj.distance = dist.toFixed(2);
                     if (idx === resp.length - 1) {
                         res.status(200).json(resp);
