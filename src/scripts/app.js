@@ -56,6 +56,11 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
             url: '/breweryDetail/:id',
             controller: 'breweryDetail',
             templateUrl: 'partials/breweryDetail.html'
+        })
+        .state('addBeer', {
+            url: '/addBeer/:id',
+            controller: 'addBeer',
+            templateUrl: 'partials/addBeer.html'
         });
 
       function skipIfLoggedIn($q, $auth) {

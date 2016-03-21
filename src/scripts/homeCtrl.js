@@ -1,8 +1,5 @@
 angular.module('app')
-  .controller('homeCtrl', function($scope, locationService) {
+  .controller('homeCtrl', function($scope) {
 
-  $scope.breweryDetails =  function(brewery){
-    console.log(brewery);
-  };
 
 });
