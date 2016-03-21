@@ -9,12 +9,10 @@ return {
               return $auth.isAuthenticated();
             };
           $scope.goHome = function(){
-                  locationService.getAddressFromCoords().then(function(res){
-                      $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
-                      $scope.search = {};
-                      $scope.search.location = res.data[0].formattedAddress;
-                      $scope.getBrewery($scope.search);
-                  });
+              $scope.brewery = {};
+              $scope.search.name = '';
+              $scope.search.beer = '';
+              $scope.getBrewery($scope.search);
           };
           $scope.getBrewery = function(brewery){
               locationService.getBrewery(brewery).then(function(res){

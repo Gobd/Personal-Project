@@ -37,67 +37,44 @@ module.exports = {
         });
     },
 
-    getBrewery2: function (req, res, next) {
-        var breweryPromise;
-        delete req.query.location;
-        if (Object.keys(req.query).length) {
-            breweryPromise = Loc.find({name: req.query.name});
-            breweryPromise.then(function (resp) {
-                res.status(200).json(resp);
+    getBrewery: function (req, res, next) {
+        if (req.query.name) {
+            geocoder.geocode(req.query.location, function (err, resp) {
+                var location = [resp[0].longitude, resp[0].latitude];
+                var distPromise = Loc.find({name: req.query.name}).lean();
+                distPromise.then(function (resp) {
+                    _(resp).forEach(function (obj, idx) {
+                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+                        obj.distance = dist.toFixed(2);
+                        if (idx === resp.length - 1) {
+                            res.status(200).json(resp);
+                        }
+                    });
+                });
             });
         } else {
-            breweryPromise = Loc.find({});
-            breweryPromise.then(function (resp) {
-                res.status(200).json(resp);
+            geocoder.geocode(req.query.location, function (err, resp) {
+                var location = [resp[0].longitude, resp[0].latitude];
+                var query = {
+                    "loc": {
+                        $near: {
+                            $geometry: {type: "Point", coordinates: location},
+                            $maxDistance: milesToMeters(100)
+                        }
+                    }
+                };
+                var distPromise = Loc.find(query).lean();
+                distPromise.then(function (resp) {
+                    _(resp).forEach(function (obj, idx) {
+                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+                        obj.distance = dist.toFixed(2);
+                        if (idx === resp.length - 1) {
+                            res.status(200).json(resp);
+                        }
+                    });
+                });
             });
         }
-    },
-
-    getBrewery: function (req, res, next) {
-        geocoder.geocode(req.query.location, function (err, resp) {
-            var location = [resp[0].longitude, resp[0].latitude];
-            var query = {
-                "loc": {
-                    $near: {
-                        $geometry: {type: "Point", coordinates: location},
-                        $maxDistance: milesToMeters(100)
-                    }
-                }
-            };
-            var distPromise = Loc.find(query).lean();
-            distPromise.then(function (resp) {
-                _(resp).forEach(function (obj, idx) {
-                    dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                    obj.distance = dist.toFixed(2);
-                    if (idx === resp.length - 1) {
-                        res.status(200).json(resp);
-                    }
-                });
-            });
-        });
-    },
-
-    getDistance: function (req, res, next) {
-        var locPromise = Loc.findOne({name: "2 row"});
-        locPromise.then(function (resp) {
-            var query = {
-                "loc": {
-                    $near: {
-                        $geometry: {type: "Point", coordinates: resp.loc.coordinates},
-                        $maxDistance: milesToMeters(5)
-                    }
-                }
-            };
-            var distPromise = Loc.find(query).lean();
-            distPromise.then(function (resp) {
-                _(resp).forEach(function (obj, idx) {
-                    obj.distance = distance(resp[0].loc.coordinates[0], resp[0].loc.coordinates[1], obj.loc.coordinates[0], obj.loc.coordinates[1]);
-                    if (idx === resp.length - 1) {
-                        res.status(200).json(resp);
-                    }
-                });
-            });
-        });
     },
 
     addBrewry: function (req, res, next) {
