@@ -7,6 +7,7 @@ var geocoderProvider = 'google',
     _ = require('lodash'),
     beer = require('../models/beer.js'),
     beerModel = beer.model,
+    beerSchema = beer.schema,
     mongoose = require('mongoose'),
     Promise = require('bluebird');
 
@@ -79,9 +80,21 @@ module.exports = {
     },
 
     breweryDetail: function(req, res, next){
-        Loc.findById(req.params.id, function(err, resp){
-            res.status(200).json(resp);
-        })
+        if(mongoose.Types.ObjectId.isValid(req.params.id)) {
+            Loc
+                .findById(req.params.id)
+                .populate('beers')
+                .exec(function (err, resp) {
+                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                })
+        } else {
+            Loc
+                .findOne({name: req.params.id})
+                .populate('beers')
+                .exec(function (err, resp) {
+                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                })
+        }
     },
 
     addBrewry: function (req, res, next) {

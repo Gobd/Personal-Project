@@ -2,7 +2,7 @@
 <nav-dir brewery="breweries" search="search"></nav-dir>
 
 <div ng-repeat="brewery in breweries">
-    <a href="/#/breweryDetail/{{brewery._id}}">{{brewery.name}}</a> ---- {{brewery.address || 'No address available'}} ---- {{brewery.distance}} Miles
+    <a href="/#/breweryDetail/{{brewery.name}}">{{brewery.name}}</a> ---- {{brewery.address || 'No address available'}} ---- {{brewery.distance}} Miles
 </div>
 
 <div ng-if="!search.location">
