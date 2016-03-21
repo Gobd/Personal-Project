@@ -62,7 +62,12 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
             url: '/addBeer/:id',
             controller: 'addBeer',
             templateUrl: 'partials/addBeer.html'
-        });
+        })
+      .state('reviewBeer', {
+          url: '/reviewBeer/:id',
+          controller: 'reviewBeer',
+          templateUrl: 'partials/reviewBeer.html'
+      });
 
       function skipIfLoggedIn($q, $auth) {
           var deferred = $q.defer();

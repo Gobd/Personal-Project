@@ -75,4 +75,12 @@ angular.module('app')
         });
     };
 
+      this.beerReview = function(beerReview){
+          return $http({
+              method: 'POST',
+              data: beerReview,
+              url: 'http://localhost:3001/review'
+          });
+      }
+
   });

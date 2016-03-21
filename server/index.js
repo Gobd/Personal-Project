@@ -41,13 +41,21 @@ app.post('/auth/signup', accounts.postAuthSignup);
 app.post('/auth/google', accounts.postAuthGoogle);
 app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
-
-app.get('/getBrewery', geolocation.getBrewery);
-app.get('/breweryDetail/:id', geolocation.breweryDetail);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
+
+app.get('/breweryDetail/:id', geolocation.breweryDetail);
+//need a put and delete for this route
+
+app.get('/getBrewery', geolocation.getBrewery);
 app.post('/addBrewery', geolocation.addBrewry);
+//need a put and delete for this route
+
 app.post('/addBeer', geolocation.addBeer);
+//need a put, delete, and get for this route
+
+app.post('/review', geolocation.addReview);
+//need post put delete, get for reviews
 
 function checkRole(r) {
   return function(req, res, next) {

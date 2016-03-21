@@ -9,7 +9,11 @@ var geocoderProvider = 'google',
     beerModel = beer.model,
     beerSchema = beer.schema,
     mongoose = require('mongoose'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    config = require('../config'),
+    User = require('../models/user.js'),
+    deepPopulate = require('mongoose-deep-populate')(mongoose),
+    jwt = require('jwt-simple');
 
 function distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
@@ -83,14 +87,14 @@ module.exports = {
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Loc
                 .findById(req.params.id)
-                .populate('beers')
+                .deepPopulate('beers')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })
         } else {
             Loc
                 .findOne({name: req.params.id})
-                .populate('beers')
+                .deepPopulate('beers.reviews.userId')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })
@@ -112,5 +116,14 @@ module.exports = {
                 })
             }
         });
+    },
+
+    addReview: function(req, res, next){
+        var token = req.header('Authorization').split(' ')[1];
+        var payload = jwt.decode(token, config.TOKEN_SECRET);
+        req.body.userId = payload.sub;
+        beerModel.findByIdAndUpdate(req.body.beerId, {$push: {reviews: req.body}}, function(err, resp){
+            err ? res.status(500).json(err) : res.status(200).json(resp);
+        })
     }
 };

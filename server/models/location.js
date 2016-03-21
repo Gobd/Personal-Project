@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var beer = require('./beer.js');
 var beerModel = beer.model;
 var beerSchema = beer.schema;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var locationSchema = new mongoose.Schema({
   name: String,
@@ -14,5 +15,7 @@ var locationSchema = new mongoose.Schema({
 });
 
 locationSchema.index({loc: '2dsphere'});
+
+locationSchema.plugin(deepPopulate);
 
 module.exports = mongoose.model('loc', locationSchema);

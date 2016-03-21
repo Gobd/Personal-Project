@@ -1,10 +1,12 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    User = require('./user.js'),
+    deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var reviewSchema = new mongoose.Schema({
-    username: String,
-    review: String,
-    userId: Number,
-    rating: Number
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    review: String
 });
+
+reviewSchema.plugin(deepPopulate);
 
 module.exports = reviewSchema;
