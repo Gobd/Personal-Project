@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="409f2090-d8e7-4ba6-b82d-b1f6e2e0fd57" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/js/js.min.js" afterPath="$PROJECT_DIR$/dist/js/js.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/js/maps/js.min.js.map" afterPath="$PROJECT_DIR$/dist/js/maps/js.min.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/endpoints/geolocation.js" afterPath="$PROJECT_DIR$/server/endpoints/geolocation.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/scripts/Directives/navDir.js" afterPath="$PROJECT_DIR$/src/scripts/Directives/navDir.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/scripts/Directives/searchDirCtrl.js" afterPath="$PROJECT_DIR$/src/scripts/Directives/searchDirCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/scripts/locationService.js" afterPath="$PROJECT_DIR$/src/scripts/locationService.js" />
     </list>
     <ignored path="PersonalBIG.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,14 +38,24 @@
       <file leaf-file-name="searchDirCtrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/scripts/Directives/searchDirCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="40" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="40" />
+            <state relative-caret-position="315">
+              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="25" selection-end-column="6" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="navDir.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/scripts/Directives/navDir.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
@@ -77,8 +83,8 @@
         <option value="$PROJECT_DIR$/src/scripts/locationService.js" />
         <option value="$PROJECT_DIR$/src/scripts/Directives/searchDirCtrl.js" />
         <option value="$PROJECT_DIR$/server/endpoints/geolocation.js" />
-        <option value="$PROJECT_DIR$/src/scripts/Directives/navDir.js" />
         <option value="$PROJECT_DIR$/server/index.js" />
+        <option value="$PROJECT_DIR$/src/scripts/Directives/navDir.js" />
       </list>
     </option>
   </component>
@@ -377,12 +383,12 @@
       <option name="presentableId" value="Default" />
       <updated>1458337246602</updated>
       <workItem from="1458337247765" duration="2841000" />
-      <workItem from="1458568765516" duration="4368000" />
+      <workItem from="1458568765516" duration="4544000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7209000" />
+    <option name="totallyTimeSpent" value="7385000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1023" extended-state="6" />
@@ -530,26 +536,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/scripts/Directives/navDir.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/models/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scripts/Directives/searchDirCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="40" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -566,6 +556,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="36" column="34" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scripts/Directives/searchDirCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="25" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scripts/Directives/navDir.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
           <folding />
         </state>
       </provider>
