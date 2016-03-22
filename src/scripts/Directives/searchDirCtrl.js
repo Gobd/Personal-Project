@@ -5,7 +5,7 @@ angular.module('app')
           return $auth.isAuthenticated();
       };
 
-    if($scope.isAuthenticated()){
+    if($scope.isAuthenticated() && isEmpty($location.search())){
             Account.getProfile()
                 .then(function(response) {
                     $scope.user = response.data;
@@ -25,31 +25,25 @@ angular.module('app')
                         })
                     }
                 })
+    } else if (!isEmpty($location.search())) {
+        locationService.getBrewery($location.search()).then(function(res){
+            $scope.search = $location.search();
+            $scope.brewery = res.data;
+        })
+    } else {
+        locationService.getAddressFromCoords().then(function(res){
+            $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
+            $scope.search = {};
+            $scope.search.location = res.data[0].formattedAddress;
+            $scope.getBrewery($scope.search);
+        });
     }
-
-    // function firstSearch(){
-    //     locationService.getAddressFromCoords().then(function(res){
-    //         $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
-    //         $scope.search = {};
-    //         $scope.search.location = res.data[0].formattedAddress;
-    //         $scope.getBrewery($scope.search);
-    //     });
-    // }
-    //
-    // if (isEmpty($location.search())) {
-    //     firstSearch();
-    // } else {
-    //     locationService.getBrewery($location.search()).then(function(res){
-    //       $scope.search = $location.search();
-    //       $scope.brewery = res.data;
-    //     });
-    //   }
-    //
-    // $scope.getBrewery = function(brewery){
-    //   locationService.getBrewery(brewery).then(function(res){
-    //     $scope.brewery = res.data;
-    //   });
-    // };
+      
+    $scope.getBrewery = function(brewery){
+      locationService.getBrewery(brewery).then(function(res){
+        $scope.brewery = res.data;
+      });
+    };
     //
     // $scope.searchByAddress = function(address){
     //   locationService.searchByAddress(address).then(function(res){
