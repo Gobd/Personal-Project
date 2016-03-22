@@ -22,6 +22,7 @@ angular.module('app')
                             $scope.search.location = $scope.user.home;
                             $scope.brewery = res.data;
                             $scope.beers = [];
+                            $scope.beers.push('true');
                             $scope.brewery.forEach(function(brewery){
                                 brewery.beers.forEach(function(beer){
                                     $scope.beers.push(beer);
@@ -51,6 +52,7 @@ angular.module('app')
                 locationService.getRand($scope.search).then(function(res){
                     $scope.brewery = res.data;
                     $scope.beers = [];
+                    $scope.beers.push('true');
                     $scope.brewery.forEach(function(brewery){
                         brewery.beers.forEach(function(beer){
                             $scope.beers.push(beer);
@@ -64,12 +66,17 @@ angular.module('app')
       search();
 
       $scope.getBrewery = function(brewery){
+          $scope.brewery = {};
+          $scope.beers[0] = false;
           locationService.getBrewery($scope.search).then(function(res){
               $scope.brewery = res.data;
           });
       };
       
     $scope.nearMe = function(){
+        $scope.brewery = {};
+        $scope.search = {};
+        $scope.beers[0] = false;
         locationService.getAddressFromCoords().then(function(res){
             $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
             $scope.search = {};
