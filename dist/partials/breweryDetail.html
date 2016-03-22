@@ -9,4 +9,9 @@
         </div>
 </div>
 
-<a href="/#/addBeer/{{detail._id}}">Add Beer</a>
+<form name="addBeerForm" ng-model="beerToAdd" ng-submit="addBeer(beerToAdd)">
+    <input class="form-control" type="text" ng-model="beerToAdd.name" placeholder="Name...">
+    <input class="form-control" type="text" ng-model="beerToAdd.srm" placeholder="SRM...">
+    <input class="form-control" type="text" ng-model="beerToAdd.ibu" placeholder="IBU...">
+    <button class="btn btn-default" type="submit">Add</button>
+</form>

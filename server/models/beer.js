@@ -8,9 +8,14 @@ var beerSchema = new mongoose.Schema({
     srm: Number,
     ibu: Number,
     brewery: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
-    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+    loc: {
+        type: {type: String, enum: "Point", default: "Point"},
+        coordinates: [Number]
+    }
 });
 
+beerSchema.index({loc: '2dsphere'});
 beerSchema.plugin(deepPopulate);
 
 module.exports = {

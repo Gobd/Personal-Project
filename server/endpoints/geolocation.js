@@ -76,6 +76,13 @@ module.exports = {
         },
 
     getBrewery: function (req, res, next) {
+        for (var key in req.query){
+            if(req.query[key].length === 0) {
+                console.log('empty')
+                delete req.query[key]
+            }
+        }
+        console.log(req.query);
         if (req.query.name) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
@@ -94,6 +101,24 @@ module.exports = {
                     }
                 });
             });
+        } else if (req.query.beer) {
+                geocoder.geocode(req.query.location, function (err, resp) {
+                    var location = [resp[0].longitude, resp[0].latitude];
+                    var distPromise = Beer.find({name: req.query.beer}).lean();
+                    distPromise.then(function (resp) {
+                        if (Object.keys(resp).length === 0) {
+                            res.status(200).json({none: true});
+                        } else {
+                            _(resp).forEach(function (obj, idx) {
+                                dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+                                obj.distance = dist.toFixed(2);
+                                if (idx === resp.length - 1) {
+                                    res.status(200).json(resp);
+                                }
+                            });
+                        }
+                    });
+                });
         } else {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];

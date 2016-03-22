@@ -5,4 +5,12 @@ angular.module('app')
             $scope.detail = res.data;
         });
 
+        $scope.addBeer = function(beerToAdd){
+            beerToAdd.brewery = $scope.detail._id;
+            beerToAdd.loc = $scope.detail.loc;
+            locationService.addBeer(beerToAdd).then(function(res){
+                $scope.addedBeer = res.data;
+            })
+        }
+
     });

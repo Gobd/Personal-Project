@@ -67,7 +67,6 @@ angular.module('app')
 
       $scope.getBrewery = function(brewery){
           $scope.brewery = {};
-          $scope.beers[0] = false;
           locationService.getBrewery($scope.search).then(function(res){
               $scope.brewery = res.data;
           });
