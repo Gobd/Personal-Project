@@ -43,10 +43,37 @@ module.exports = {
     },
 
     getRand: function(req, res, next){
-        User.findById(function(err, user){
-
-        })
-    },
+        geocoder.geocode(req.query.location, function (err, resp) {
+            var location = [resp[0].longitude, resp[0].latitude];
+            var query = {
+                "loc": {
+                    $near: {
+                        $geometry: {type: "Point", coordinates: location},
+                        $maxDistance: milesToMeters(100)
+                    }
+                }
+            };
+            Location
+                .find(query)
+                .deepPopulate('beers.brewery')
+                .exec(function (err, resp) {
+                    var arr = [];
+                    var ret = [];
+                    while(arr.length < 5) {
+                        var rand = Math.floor(Math.random()*resp.length);
+                        if (arr.indexOf(rand) === -1) {
+                            arr.push(rand);
+                        }
+                    }
+                    _(arr).forEach(function(obj, idx){
+                        ret.push(resp[obj]);
+                        if (idx === arr.length - 1) {
+                            res.status(200).json(ret);
+                        }
+                    })
+                    });
+                })
+        },
 
     getBrewery: function (req, res, next) {
         if (req.query.name) {

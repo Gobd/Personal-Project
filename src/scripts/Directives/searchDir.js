@@ -4,6 +4,6 @@ return {
       replace: 'true',
       templateUrl: './partials/Directives/topDir.html',
       controller: 'searchDirCtrl',
-      scope: {brewery: '=', search: '='}
+      scope: {brewery: '=', search: '=', beers: '='}
   };
 });

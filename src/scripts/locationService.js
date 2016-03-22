@@ -13,6 +13,14 @@ angular.module('app')
       return deferred.promise;
     }
 
+      this.getRand = function(location){
+          return $http({
+              method: 'GET',
+              params: location,
+              url: 'http://localhost:3001/getRand'
+          });
+      };
+
       this.addHome = function(home){
           return $http({
               method: 'POST',

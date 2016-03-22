@@ -17,10 +17,16 @@ angular.module('app')
                 .then(function(response) {
                     $scope.user = response.data;
                     if ($scope.user.home){
-                        locationService.getBrewery({location: $scope.user.home}).then(function(res){
+                        locationService.getRand({location: $scope.user.home}).then(function(res){
                             $scope.search = {};
                             $scope.search.location = $scope.user.home;
                             $scope.brewery = res.data;
+                            $scope.beers = [];
+                            $scope.brewery.forEach(function(brewery){
+                                brewery.beers.forEach(function(beer){
+                                    $scope.beers.push(beer);
+                                })
+                            });
                         });
                     } else {
                         locationService.getAddressFromCoords().then(function(res){
@@ -42,8 +48,14 @@ angular.module('app')
                 $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
                 $scope.search = {};
                 $scope.search.location = res.data[0].formattedAddress;
-                locationService.getBrewery($scope.search).then(function(res){
+                locationService.getRand($scope.search).then(function(res){
                     $scope.brewery = res.data;
+                    $scope.beers = [];
+                    $scope.brewery.forEach(function(brewery){
+                        brewery.beers.forEach(function(beer){
+                            $scope.beers.push(beer);
+                        })
+                    });
                 });
             });
         }

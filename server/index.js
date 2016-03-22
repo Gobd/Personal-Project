@@ -44,7 +44,7 @@ app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
 app.post('/addHome', checkRole('user'), accounts.addHome, geolocation.getBrewery);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
-
+app.get('/getRand', geolocation.getRand);
 app.get('/breweryDetail/:id', geolocation.breweryDetail);
 //need a put and delete for this route
 
