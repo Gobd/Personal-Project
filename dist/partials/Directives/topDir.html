@@ -1,7 +1,5 @@
 <div class="cont">
 
-  {{user}}
-
 <div id="nav">
   <ul>
     <li><a href="/#/" ng-click="goHome()"><img src="beer.png"></a></li>
@@ -10,6 +8,7 @@
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
+    <li><a href="/#/" ng-click="nearMe()">Near Me</a></li>
   </ul>
 </div>
 

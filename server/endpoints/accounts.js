@@ -22,7 +22,7 @@ function createJWT(user) {
 module.exports = {
 
   addHome: function(req, res, next){
-    User.findByIdAndUpdate(req.body.userId, {home: req.body.home}, function(err, resp){
+    User.findByIdAndUpdate(req.user, {home: req.body.home}, function(err, resp){
       req.query.location = req.body.home;
       next();
     })

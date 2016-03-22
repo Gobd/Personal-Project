@@ -41,7 +41,7 @@ app.post('/auth/signup', accounts.postAuthSignup);
 app.post('/auth/google', accounts.postAuthGoogle);
 app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
-app.post('/addHome', accounts.addHome, geolocation.getBrewery);
+app.post('/addHome', checkRole('user'), accounts.addHome, geolocation.getBrewery);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
 
@@ -55,12 +55,12 @@ app.post('/addBrewery', geolocation.addBrewry);
 app.post('/addBeer', geolocation.addBeer);
 //need a put, delete, and get for this route
 
-app.post('/review', geolocation.addReview);
+app.post('/review', checkRole('user'), geolocation.addReview);
 //need post put delete, get for reviews
 
-function checkRole(r) {
+function checkRole(role) {
   return function(req, res, next) {
-    var role = r;
+    var role = role;
     if (!req.header('Authorization')) {
       return res.status(401).send({
         message: 'Please make sure your request has an Authorization header'

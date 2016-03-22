@@ -12,8 +12,7 @@ var geocoderProvider = 'google',
     mongoose = require('mongoose'),
     Promise = require('bluebird'),
     User = require('../models/user.js'),
-    deepPopulate = require('mongoose-deep-populate')(mongoose),
-    jwt = require('jwt-simple');
+    deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 function distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
@@ -44,9 +43,6 @@ module.exports = {
     },
 
     getRand: function(req, res, next){
-        var token = req.header('Authorization').split(' ')[1];
-        var payload = jwt.decode(token, config.TOKEN_SECRET);
-        var userId = payload.sub;
         User.findById(function(err, user){
 
         })
@@ -132,13 +128,10 @@ module.exports = {
     },
 
     addReview: function(req, res, next){
-        var token = req.header('Authorization').split(' ')[1];
-        var payload = jwt.decode(token, config.TOKEN_SECRET);
-        req.body.userId = payload.sub;
         Review.create(req.body, function(err, resp){
             var reviewId = resp._id;
             Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
-                User.findByIdAndUpdate(req.body.userId, {$push: {reviews: reviewId}}, function(err, resp){
+                User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })
             })
