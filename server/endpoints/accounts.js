@@ -22,9 +22,12 @@ function createJWT(user) {
 module.exports = {
 
   getApiMe: function(req, res) {
-    User.findById(req.user, function(err, user) {
-      res.send(user);
-    });
+    User
+        .findById(req.user)
+        .deepPopulate('reviews.beerId')
+        .exec(function (err, resp) {
+          err ? res.status(500).json(err) : res.status(200).json(resp);
+        })
   },
 
   putApiMe: function(req, res) {

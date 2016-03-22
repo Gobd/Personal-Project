@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
-  , bcrypt = require('bcryptjs');
+  , bcrypt = require('bcryptjs')
+  , deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 GLOBAL.userRoles = ['user', 'brewer', 'root'];
 
@@ -33,5 +34,7 @@ userSchema.methods.comparePassword = function(password, done) {
     done(err, isMatch);
   });
 };
+
+userSchema.plugin(deepPopulate);
 
 module.exports = mongoose.model('User', userSchema);

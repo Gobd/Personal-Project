@@ -38,7 +38,7 @@ module.exports = {
     },
 
     getCoords: function (req, res, next) {
-        geocoder.geocode(req.query.location, function (err, resp) {
+        geocoder.geocode(req.query.address, function (err, resp) {
             res.status(200).json(resp);
         });
     },
