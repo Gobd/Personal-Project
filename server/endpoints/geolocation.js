@@ -43,6 +43,15 @@ module.exports = {
         });
     },
 
+    getRand: function(req, res, next){
+        var token = req.header('Authorization').split(' ')[1];
+        var payload = jwt.decode(token, config.TOKEN_SECRET);
+        var userId = payload.sub;
+        User.findById(function(err, user){
+
+        })
+    },
+
     getBrewery: function (req, res, next) {
         if (req.query.name) {
             geocoder.geocode(req.query.location, function (err, resp) {

@@ -12,6 +12,7 @@ var userSchema = new mongoose.Schema({
   picture: String,
   facebook: String,
   google: String,
+  home: String,
   role: { type: String, default: 'user', enum: userRoles },
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });

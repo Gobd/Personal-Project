@@ -21,6 +21,13 @@ function createJWT(user) {
 
 module.exports = {
 
+  addHome: function(req, res, next){
+    User.findByIdAndUpdate(req.body.userId, {home: req.body.home}, function(err, resp){
+      req.query.location = req.body.home;
+      next();
+    })
+  },
+
   getApiMe: function(req, res) {
     User
         .findById(req.user)
@@ -66,7 +73,7 @@ module.exports = {
       });
     });
   },
-
+  
   postAuthSignup: function(req, res) {
     User.findOne({
       email: req.body.email

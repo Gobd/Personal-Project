@@ -13,6 +13,14 @@ angular.module('app')
       return deferred.promise;
     }
 
+      this.addHome = function(home){
+          return $http({
+              method: 'POST',
+              data: home,
+              url: 'http://localhost:3001/addHome'
+          });
+      };
+
     this.getAddressFromCoords = function() {
       return geoLocation().then(function(position) {
         return $http({

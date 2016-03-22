@@ -1,8 +1,8 @@
-angular.module('app').directive('searchDir', function () {
+angular.module('app').directive('topDir', function () {
 return {
       restrict: 'AE',
       replace: 'true',
-      templateUrl: './partials/Directives/searchDir.html',
+      templateUrl: './partials/Directives/topDir.html',
       controller: 'searchDirCtrl',
       scope: {brewery: '=', search: '='}
   };

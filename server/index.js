@@ -41,6 +41,7 @@ app.post('/auth/signup', accounts.postAuthSignup);
 app.post('/auth/google', accounts.postAuthGoogle);
 app.post('/auth/facebook', accounts.postAuthFacebook);
 app.post('/auth/unlink', checkRole('user'), accounts.postAuthUnlink);
+app.post('/addHome', accounts.addHome, geolocation.getBrewery);
 app.get('/getAddress', geolocation.getAddress);
 app.get('/getCoords', geolocation.getCoords);
 
