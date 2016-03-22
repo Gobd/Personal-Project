@@ -75,14 +75,14 @@ module.exports = {
                 })
         },
 
+    //if there is no location search without it, we need to search with beer or name, with or without locations
+    //so we have 4 possibilites
     getBrewery: function (req, res, next) {
         for (var key in req.query){
             if(req.query[key].length === 0) {
-                console.log('empty')
                 delete req.query[key]
             }
         }
-        console.log(req.query);
         if (req.query.name) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
