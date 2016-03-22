@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-var reviewSchema = require('./review.js');
+var ReviewConfig = require('./review.js');
+var Review = ReviewConfig.model;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var beerSchema = new mongoose.Schema({
@@ -7,12 +8,12 @@ var beerSchema = new mongoose.Schema({
     srm: Number,
     ibu: Number,
     brewery: mongoose.Schema.Types.ObjectId,
-    reviews: [reviewSchema]
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });
 
 beerSchema.plugin(deepPopulate);
 
 module.exports = {
-    schema: beerSchema,
-    model: mongoose.model('beer', beerSchema)
+    model: mongoose.model('Beer', beerSchema),
+    schema: beerSchema
 };

@@ -3,14 +3,14 @@ var geocoderProvider = 'google',
     config = require('../config'),
     extra = {apiKey: config.maps},
     geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra),
-    Loc = require('../models/location.js'),
+    Location = require('../models/location.js'),
     _ = require('lodash'),
-    beer = require('../models/beer.js'),
-    beerModel = beer.model,
-    beerSchema = beer.schema,
+    BeerConfig = require('../models/beer.js'),
+    Beer = BeerConfig.model,
+    ReviewConfig = require ('../models/review.js'),
+    Review = ReviewConfig.model,
     mongoose = require('mongoose'),
     Promise = require('bluebird'),
-    config = require('../config'),
     User = require('../models/user.js'),
     deepPopulate = require('mongoose-deep-populate')(mongoose),
     jwt = require('jwt-simple');
@@ -47,15 +47,19 @@ module.exports = {
         if (req.query.name) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Loc.find({name: req.query.name}).lean();
+                var distPromise = Location.find({name: req.query.name}).lean();
                 distPromise.then(function (resp) {
-                    _(resp).forEach(function (obj, idx) {
-                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                        obj.distance = dist.toFixed(2);
-                        if (idx === resp.length - 1) {
-                            res.status(200).json(resp);
-                        }
-                    });
+                    if (Object.keys(resp).length === 0) {
+                        res.status(200).json({none: true});
+                    } else {
+                        _(resp).forEach(function (obj, idx) {
+                            dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+                            obj.distance = dist.toFixed(2);
+                            if (idx === resp.length - 1) {
+                                res.status(200).json(resp);
+                            }
+                        });
+                    }
                 });
             });
         } else {
@@ -69,7 +73,7 @@ module.exports = {
                         }
                     }
                 };
-                var distPromise = Loc.find(query).lean();
+                var distPromise = Location.find(query).lean();
                 distPromise.then(function (resp) {
                     _(resp).forEach(function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
@@ -85,14 +89,14 @@ module.exports = {
 
     breweryDetail: function(req, res, next){
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Loc
+            Location
                 .findById(req.params.id)
                 .deepPopulate('beers')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })
         } else {
-            Loc
+            Location
                 .findOne({name: req.params.id})
                 .deepPopulate('beers.reviews.userId')
                 .exec(function (err, resp) {
@@ -102,16 +106,16 @@ module.exports = {
     },
 
     addBrewry: function (req, res, next) {
-        Loc.create(req.body);
+        Location.create(req.body);
         res.status(200).json(req.body);
     },
 
     addBeer: function(req, res, next) {
         var breweryId = req.body.brewery;
-        beerModel.create(req.body, function(err, resp){
+        Beer.create(req.body, function(err, resp){
             if (err) {res.status(500).json(err)} else {
                 var beerId = resp._id;
-                Loc.findByIdAndUpdate(breweryId, {$push: {beers: beerId}}, function(err, resp){
+                Location.findByIdAndUpdate(breweryId, {$push: {beers: beerId}}, function(err, resp){
                     res.status(200).json(resp);
                 })
             }
@@ -122,8 +126,13 @@ module.exports = {
         var token = req.header('Authorization').split(' ')[1];
         var payload = jwt.decode(token, config.TOKEN_SECRET);
         req.body.userId = payload.sub;
-        beerModel.findByIdAndUpdate(req.body.beerId, {$push: {reviews: req.body}}, function(err, resp){
-            err ? res.status(500).json(err) : res.status(200).json(resp);
-        })
+        Review.create(req.body, function(err, resp){
+            var reviewId = resp._id;
+            Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
+                User.findByIdAndUpdate(req.body.userId, {$push: {reviews: reviewId}}, function(err, resp){
+                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                })
+            })
+        });
     }
 };

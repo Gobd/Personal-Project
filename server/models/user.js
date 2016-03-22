@@ -11,7 +11,8 @@ var userSchema = new mongoose.Schema({
   picture: String,
   facebook: String,
   google: String,
-  role: { type: String, default: 'user', enum: userRoles }
+  role: { type: String, default: 'user', enum: userRoles },
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });
 
 userSchema.pre('save', function(next) {

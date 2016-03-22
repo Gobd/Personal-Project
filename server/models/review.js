@@ -4,9 +4,13 @@ var mongoose = require('mongoose'),
 
 var reviewSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    beerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Beer' },
     review: String
 });
 
 reviewSchema.plugin(deepPopulate);
 
-module.exports = reviewSchema;
+module.exports = {
+    model: mongoose.model('Review', reviewSchema),
+    schema: reviewSchema
+};
