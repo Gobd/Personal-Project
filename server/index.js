@@ -16,6 +16,7 @@ var express = require('express'),
   helmet = require('helmet'),
   app = express();
 
+app.enable('trust proxy');
 mongoose.Promise = require('bluebird');
 
 mongoose.connect('mongodb://localhost/personal');
@@ -69,7 +70,7 @@ function checkRole(role) {
     var token = req.header('Authorization').split(' ')[1];
     var payload = null;
     try {
-      payload = jwt.decode(token, config.TOKEN_SECRET);
+      payload = jwt.decode(token, config.TOKEN_SECRET, 'HS256');
     } catch (err) {
       return res.status(401).send({
         message: err.message

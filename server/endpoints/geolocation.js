@@ -47,7 +47,7 @@ module.exports = {
             var location = [resp[0].longitude, resp[0].latitude];
             var query = {
                 "loc": {
-                    $near: {
+                    $geoNear: {
                         $geometry: {type: "Point", coordinates: location},
                         $maxDistance: milesToMeters(100)
                     }
@@ -55,7 +55,7 @@ module.exports = {
             };
             Location
                 .find(query)
-                // .deepPopulate('beers.brewery')
+                .deepPopulate('beers.brewery')
                 .exec(function (err, resp) {
                     var arr = [];
                     var ret = [];

@@ -37,7 +37,6 @@
     "moment": "^2.12.0",
     "mongoose": "^4.4.7",
     "mongoose-deep-populate": "^3.0.0",
-    "mongoose-simple-random": "^0.3.3",
     "node-geocoder": "^3.8.0",
     "querystring": "^0.2.0",
     "rupture": "^0.6.1"
