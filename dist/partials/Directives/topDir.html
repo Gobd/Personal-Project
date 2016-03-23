@@ -13,13 +13,13 @@
 </div>
 {{search.name}}
   <div id="search">
-    <form name="searchForm" ng-submit="getBrewery(search)">
-      <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" uib-typeahead="brewery for brewery in getBrewery(search)" typeahead-min-length="0" typeahead-wait-ms="250" placeholder="Search by brewery...">
+    <form name="searchForm">
+      <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }' placeholder="Search by brewery...">
       OR
-      <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" uib-typeahead="brewery for brewery in getBrewery(search)" placeholder="Search by beer...">
+      <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }' placeholder="Search by beer...">
       <label for="location">Near: </label>
       <input id="location" class="form-control" name="location" type="text" ng-model="search.location">
-      <button class="btn btn-default" type="submit">Search</button>
+      <div>Type to search</div>
     </form>
   </div>
 

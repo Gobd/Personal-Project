@@ -78,23 +78,27 @@ module.exports = {
     //if there is no location search without it, we need to search with beer or name, with or without locations
     //so we have 4 possibilites
     getBrewery: function (req, res, next) {
+        var reg;
         for (var key in req.query){
             if(req.query[key].length === 0) {
                 delete req.query[key]
             }
         }
         if (req.query.name && !req.query.location) {
-                    Location.find({name: req.query.name}, function(err, resp){
+            reg = new RegExp('\\w*(' + req.query.name + ')\\w*', "ig");
+                    Location.find({name: reg}, function(err, resp){
                         err ? res.status(500).json(err) : res.status(200).json(resp)
                     })
             } else if (req.query.beer && !req.query.location) {
-            Beer.find({name: req.query.beer}, function(err, resp){
+            reg = new RegExp('\\w*(' + req.query.beer + ')\\w*', "ig");
+            Beer.find({name: reg}, function(err, resp){
                 err ? res.status(500).json(err) : res.status(200).json(resp)
             })
         } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Location.find({name: req.query.name}).lean();
+                reg = new RegExp('\\w*(' + req.query.name + ')\\w*', "ig");
+                var distPromise = Location.find({name: reg}).lean();
                 distPromise.then(function (resp) {
                     _(resp).forEach(function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
@@ -107,8 +111,9 @@ module.exports = {
             });
         } else if (req.query.beer && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
+                reg = new RegExp('\\w*(' + req.query.beer + ')\\w*', "ig");
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Beer.find({name: req.query.beer}).lean();
+                var distPromise = Beer.find({name: reg}).lean();
                 distPromise.then(function (resp) {
                     _(resp).forEach(function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
