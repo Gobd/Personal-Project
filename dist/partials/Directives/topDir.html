@@ -11,11 +11,12 @@
     <li><a href="/#/" ng-click="nearMe()">Near Me</a></li>
   </ul>
 </div>
-
+{{search.name}}
   <div id="search">
-    <form name="searchForm" ng-model="search" ng-submit="getBrewery(search)">
-      <input class="form-control" type="text" ng-model="search.name" placeholder="Search by brewery...">
-      <input class="form-control" type="text" ng-model="search.beer" placeholder="Search by beer...">
+    <form name="searchForm" ng-submit="getBrewery(search)">
+      <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" uib-typeahead="brewery for brewery in getBrewery(search)" typeahead-min-length="0" typeahead-wait-ms="250" placeholder="Search by brewery...">
+      OR
+      <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" uib-typeahead="brewery for brewery in getBrewery(search)" placeholder="Search by beer...">
       <label for="location">Near: </label>
       <input id="location" class="form-control" name="location" type="text" ng-model="search.location">
       <button class="btn btn-default" type="submit">Search</button>

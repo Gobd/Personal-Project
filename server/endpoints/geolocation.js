@@ -32,13 +32,13 @@ module.exports = {
 
     getAddress: function (req, res, next) {
         geocoder.reverse({lat: req.query.lat, lon: req.query.long}, function (err, resp) {
-            res.status(200).json(resp);
+            err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
 
     getCoords: function (req, res, next) {
         geocoder.geocode(req.query.address, function (err, resp) {
-            res.status(200).json(resp);
+            err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
 
@@ -55,7 +55,7 @@ module.exports = {
             };
             Location
                 .find(query)
-                .deepPopulate('beers.brewery')
+                // .deepPopulate('beers.brewery')
                 .exec(function (err, resp) {
                     var arr = [];
                     var ret = [];
@@ -83,54 +83,46 @@ module.exports = {
                 delete req.query[key]
             }
         }
-        if (req.query.name) {
+        if (req.query.name && !req.query.location) {
+                    Location.find({name: req.query.name}, function(err, resp){
+                        err ? res.status(500).json(err) : res.status(200).json(resp)
+                    })
+            } else if (req.query.beer && !req.query.location) {
+            Beer.find({name: req.query.beer}, function(err, resp){
+                err ? res.status(500).json(err) : res.status(200).json(resp)
+            })
+        } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
                 var distPromise = Location.find({name: req.query.name}).lean();
                 distPromise.then(function (resp) {
-                    if (Object.keys(resp).length === 0) {
-                        res.status(200).json({none: true});
-                    } else {
-                        _(resp).forEach(function (obj, idx) {
-                            dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                            obj.distance = dist.toFixed(2);
-                            if (idx === resp.length - 1) {
-                                res.status(200).json(resp);
-                            }
-                        });
-                    }
-                });
-            });
-        } else if (req.query.beer) {
-                geocoder.geocode(req.query.location, function (err, resp) {
-                    var location = [resp[0].longitude, resp[0].latitude];
-                    var distPromise = Beer.find({name: req.query.beer}).lean();
-                    distPromise.then(function (resp) {
-                        if (Object.keys(resp).length === 0) {
-                            res.status(200).json({none: true});
-                        } else {
-                            _(resp).forEach(function (obj, idx) {
-                                dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                                obj.distance = dist.toFixed(2);
-                                if (idx === resp.length - 1) {
-                                    res.status(200).json(resp);
-                                }
-                            });
+                    _(resp).forEach(function (obj, idx) {
+                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+                        obj.distance = dist.toFixed(2);
+                        if (idx === resp.length - 1) {
+                            res.status(200).json(resp);
                         }
                     });
                 });
-        } else {
+            });
+        } else if (req.query.beer && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
-                var query = {
-                    "loc": {
-                        $near: {
-                            $geometry: {type: "Point", coordinates: location},
-                            $maxDistance: milesToMeters(100)
+                var distPromise = Beer.find({name: req.query.beer}).lean();
+                distPromise.then(function (resp) {
+                    _(resp).forEach(function (obj, idx) {
+                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+                        obj.distance = dist.toFixed(2);
+                        if (idx === resp.length - 1) {
+                            res.status(200).json(resp);
                         }
-                    }
-                };
-                var distPromise = Location.find(query).lean();
+                    });
+                });
+            });
+        } else if (!req.query.beer && !req.query.name && req.query.location) {
+            geocoder.geocode(req.query.location, function (err, resp) {
+                var location = [resp[0].longitude, resp[0].latitude];
+                var distPromise = Location.find({}).lean();
                 distPromise.then(function (resp) {
                     _(resp).forEach(function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
@@ -148,14 +140,14 @@ module.exports = {
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Location
                 .findById(req.params.id)
-                .deepPopulate('beers')
+                // .deepPopulate('beers')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })
         } else {
             Location
                 .findOne({name: req.params.id})
-                .deepPopulate('beers.reviews.userId')
+                // .deepPopulate('beers.reviews.userId')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })

@@ -31,7 +31,7 @@ module.exports = {
   getApiMe: function(req, res) {
     User
         .findById(req.user)
-        .deepPopulate('reviews.beerId.brewery')
+        // .deepPopulate('reviews.beerId.brewery')
         .exec(function (err, resp) {
           err ? res.status(500).json(err) : res.status(200).json(resp);
         })

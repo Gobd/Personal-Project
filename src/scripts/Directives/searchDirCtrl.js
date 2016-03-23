@@ -65,9 +65,9 @@ angular.module('app')
 
       search();
 
-      $scope.getBrewery = function(brewery){
+      $scope.getBrewery = function(search){
           $scope.brewery = {};
-          locationService.getBrewery($scope.search).then(function(res){
+          locationService.getBrewery(search).then(function(res){
               $scope.brewery = res.data;
           });
       };
