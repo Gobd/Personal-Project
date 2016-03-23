@@ -2,23 +2,24 @@
 
 <div id="nav">
   <ul>
-    <li><a href="/#/" ng-click="goHome()"><img src="beer.png"></a></li>
+    <li class="grow"><a href="/#/" ng-click="goHome()"><img src="beer.png"></a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
-    <li><a href="/#/" ng-click="nearMe()">Near Me</a></li>
+      <li id="locationLi"><label for="location"><i ng-click="nearMe()" class="fa fa-compass fa-lg grow"></i> Near: </label>
+          <input id="location" class="form-control" name="location" type="text" ng-model="search.location"></li>
+      <li><i ng-click="showsearch = !showsearch" class="fa fa-search fa-3x grow"></i></li>
   </ul>
 </div>
-{{search.name}}
-  <div id="search">
+
+  <div ng-if="showsearch" id="search">
     <form name="searchForm">
       <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }' placeholder="Search by brewery...">
       OR
       <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }' placeholder="Search by beer...">
-      <label for="location">Near: </label>
-      <input id="location" class="form-control" name="location" type="text" ng-model="search.location">
+
       <div>Type to search</div>
     </form>
   </div>

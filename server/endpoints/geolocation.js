@@ -145,14 +145,14 @@ module.exports = {
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Location
                 .findById(req.params.id)
-                // .deepPopulate('beers')
+                .deepPopulate('beers')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })
         } else {
             Location
                 .findOne({name: req.params.id})
-                // .deepPopulate('beers.reviews.userId')
+                .deepPopulate('beers.reviews.userId')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 })

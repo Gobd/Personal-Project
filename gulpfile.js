@@ -77,7 +77,6 @@ gulp.task('js', function(){
 gulp.task('watch', function(){
   gulp.watch('./src/styles/**/*.styl', ['stylus']);
   gulp.watch('./src/scripts/**/*.js', ['js']);
-    gulp.watch('./dist/**/*.html', ['server']);
   gulp.watch('./bower_components/satellizer/satellizer.js', ['bowerJs']);
 });
 
