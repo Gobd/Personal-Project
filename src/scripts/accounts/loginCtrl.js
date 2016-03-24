@@ -11,7 +11,7 @@ angular.module('app')
         });
     };
     $scope.authenticate = function(provider) {
-      $auth.authenticate(provider)
+      $auth.authenticate(provider, {here: 'userdata from login ctrl'})
         .then(function() {
           toastr.success('You have successfully signed in with ' + provider + '!');
           $location.path('/');

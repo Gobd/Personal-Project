@@ -1,3 +1,5 @@
+/* jshint -W030 */
+
 var geocoderProvider = 'google',
     httpAdapter = 'https',
     config = require('../config'),
@@ -30,19 +32,19 @@ var milesToMeters = function (miles) {
 
 module.exports = {
 
-    getAddress: function (req, res, next) {
+    getAddress: function (req, res) {
         geocoder.reverse({lat: req.query.lat, lon: req.query.long}, function (err, resp) {
             err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
 
-    getCoords: function (req, res, next) {
+    getCoords: function (req, res) {
         geocoder.geocode(req.query.address, function (err, resp) {
             err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
 
-    getRand: function(req, res, next){
+    getRand: function(req, res){
         geocoder.geocode(req.query.location, function (err, resp) {
             var location = [resp[0].longitude, resp[0].latitude];
             var query = {
@@ -57,50 +59,33 @@ module.exports = {
                 .find(query)
                 .deepPopulate('beers.brewery')
                 .exec(function (err, resp) {
-                    var arr = [];
-                    var ret = [];
-                    while(arr.length < 5) {
-                        var rand = Math.floor(Math.random()*resp.length);
-                        if (arr.indexOf(rand) === -1) {
-                            arr.push(rand);
-                        }
-                    }
-                    _(arr).forEach(function(obj, idx){
-                        ret.push(resp[obj]);
-                        if (idx === arr.length - 1) {
-                            res.status(200).json(ret);
-                        }
-                    })
-                    });
-                })
+                    err ? res.status(500).json(err) : res.status(200).json(_.shuffle(_.sampleSize(resp, 5)));
+                });
+        });
         },
 
     //if there is no location search without it, we need to search with beer or name, with or without locations
     //so we have 4 possibilites
-    getBrewery: function (req, res, next) {
+    getBrewery: function (req, res) {
         var reg;
-        for (var key in req.query){
-            if(req.query[key].length === 0) {
-                delete req.query[key]
-            }
-        }
+        req.query = _.omitBy(req.query, _.isEmpty);
         if (req.query.name && !req.query.location) {
             reg = new RegExp('\\w*(' + req.query.name + ')\\w*', "ig");
                     Location.find({name: reg}, function(err, resp){
-                        err ? res.status(500).json(err) : res.status(200).json(resp)
-                    })
+                        err ? res.status(500).json(err) : res.status(200).json(resp);
+                    });
             } else if (req.query.beer && !req.query.location) {
             reg = new RegExp('\\w*(' + req.query.beer + ')\\w*', "ig");
             Beer.find({name: reg}, function(err, resp){
-                err ? res.status(500).json(err) : res.status(200).json(resp)
-            })
+                err ? res.status(500).json(err) : res.status(200).json(resp);
+            });
         } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
                 reg = new RegExp('\\w*(' + req.query.name + ')\\w*', "ig");
                 var distPromise = Location.find({name: reg}).lean();
                 distPromise.then(function (resp) {
-                    _(resp).forEach(function (obj, idx) {
+                    _.forEach(resp, function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
                         obj.distance = dist.toFixed(2);
                         if (idx === resp.length - 1) {
@@ -115,7 +100,7 @@ module.exports = {
                 var location = [resp[0].longitude, resp[0].latitude];
                 var distPromise = Beer.find({name: reg}).lean();
                 distPromise.then(function (resp) {
-                    _(resp).forEach(function (obj, idx) {
+                    _.forEach(resp, function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
                         obj.distance = dist.toFixed(2);
                         if (idx === resp.length - 1) {
@@ -129,7 +114,7 @@ module.exports = {
                 var location = [resp[0].longitude, resp[0].latitude];
                 var distPromise = Location.find({}).lean();
                 distPromise.then(function (resp) {
-                    _(resp).forEach(function (obj, idx) {
+                    _.forEach(resp, function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
                         obj.distance = dist.toFixed(2);
                         if (idx === resp.length - 1) {
@@ -141,49 +126,49 @@ module.exports = {
         }
     },
 
-    breweryDetail: function(req, res, next){
+    breweryDetail: function(req, res){
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Location
                 .findById(req.params.id)
                 .deepPopulate('beers')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
-                })
+                });
         } else {
             Location
                 .findOne({name: req.params.id})
                 .deepPopulate('beers.reviews.userId')
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
-                })
+                });
         }
     },
 
-    addBrewry: function (req, res, next) {
+    addBrewry: function (req, res) {
         Location.create(req.body);
         res.status(200).json(req.body);
     },
 
-    addBeer: function(req, res, next) {
+    addBeer: function(req, res) {
         var breweryId = req.body.brewery;
         Beer.create(req.body, function(err, resp){
-            if (err) {res.status(500).json(err)} else {
+            if (err) {res.status(500).json(err);} else {
                 var beerId = resp._id;
                 Location.findByIdAndUpdate(breweryId, {$push: {beers: beerId}}, function(err, resp){
                     res.status(200).json(resp);
-                })
+                });
             }
         });
     },
 
-    addReview: function(req, res, next){
+    addReview: function(req, res){
         Review.create(req.body, function(err, resp){
             var reviewId = resp._id;
             Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
                 User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){
                     err ? res.status(500).json(err) : res.status(200).json(resp);
-                })
-            })
+                });
+            });
         });
     }
 };
