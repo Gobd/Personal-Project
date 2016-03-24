@@ -1,5 +1,3 @@
-/* jshint -W030 */
-
 var geocoderProvider = 'google',
     httpAdapter = 'https',
     config = require('../config'),
@@ -19,11 +17,9 @@ var geocoderProvider = 'google',
 function distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = Math.cos;
-    var a = 0.5 - c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) *
-        (1 - c((lon2 - lon1) * p)) / 2;
-
-    return 7917.5117 * Math.asin(Math.sqrt(a));
+    var a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    var dist = 7917.5117 * Math.asin(Math.sqrt(a));
+    return dist.toFixed(2);
 }
 
 var milesToMeters = function (miles) {
@@ -49,6 +45,13 @@ var makeRegex = function(search){
     return new RegExp('\\w*(' + search + ')\\w*', "ig");
 };
 
+var addDistance = function(res, location){
+    return _.forEach(res, function (obj, idx) {
+        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
+        obj.distance = dist;
+    });
+};
+
 module.exports = {
 
     getAddress: function (req, res) {
@@ -65,6 +68,7 @@ module.exports = {
 
     getRand: function(req, res){
         geocoder.geocode(req.query.location, function (err, resp) {
+            if (err) res.status(500).json(err);
             var location = [resp[0].longitude, resp[0].latitude];
             var query = makeQuery(location);
             Location
@@ -93,46 +97,31 @@ module.exports = {
             });
         } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
+                if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
                 reg = makeRegex(req.query.name);
                 var distPromise = Location.find(makeQuery(location, {name: reg})).lean();
                 distPromise.then(function (resp) {
-                    _.forEach(resp, function (obj, idx) {
-                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                        obj.distance = dist.toFixed(2);
-                        if (idx === resp.length - 1) {
-                            res.status(200).json(resp);
-                        }
-                    });
+                    res.status(200).json(addDistance(resp, location));
                 });
             });
         } else if (req.query.beer && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
+                if (err) res.status(500).json(err);
                 reg = makeRegex(req.query.beer);
                 var location = [resp[0].longitude, resp[0].latitude];
                 var distPromise = Beer.find(makeQuery(location, {name: reg})).lean();
                 distPromise.then(function (resp) {
-                    _.forEach(resp, function (obj, idx) {
-                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                        obj.distance = dist.toFixed(2);
-                        if (idx === resp.length - 1) {
-                            res.status(200).json(resp);
-                        }
-                    });
+                    res.status(200).json(addDistance(resp, location));
                 });
             });
         } else if (!req.query.beer && !req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
+                if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
                 var distPromise = Location.find(makeQuery(location)).lean();
                 distPromise.then(function (resp) {
-                    _.forEach(resp, function (obj, idx) {
-                        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-                        obj.distance = dist.toFixed(2);
-                        if (idx === resp.length - 1) {
-                            res.status(200).json(resp);
-                        }
-                    });
+                    res.status(200).json(addDistance(resp, location));
                 });
             });
         }
@@ -157,8 +146,9 @@ module.exports = {
     },
 
     addBrewry: function (req, res) {
-        Location.create(req.body);
-        res.status(200).json(req.body);
+        Location.create(req.body, function(err, resp){
+            err ? res.status(500).json(err) : res.status(200).json(resp);
+        });
     },
 
     addBeer: function(req, res) {
@@ -167,7 +157,7 @@ module.exports = {
             if (err) {res.status(500).json(err);} else {
                 var beerId = resp._id;
                 Location.findByIdAndUpdate(breweryId, {$push: {beers: beerId}}, function(err, resp){
-                    res.status(200).json(resp);
+                    err ? res.status(500).json(err) : res.status(200).json(resp);
                 });
             }
         });
