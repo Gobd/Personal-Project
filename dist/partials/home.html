@@ -1,12 +1,16 @@
 <div ng-if="breweries.none">Nothing Found</div>
 
-<div ng-if="!breweries.none" ng-repeat="brewery in breweries">
+<div ng-if="search.name || (!search.name  && !search.beer)" ng-repeat="brewery in breweries">
     <a href="/#/breweryDetail/{{brewery.name}}">{{brewery.name}}</a>
 </div>
 
-<!--this is the random beer frontpage function and will only show when random search was conducted-->
+<div ng-if="search.beer" ng-repeat="brewery in breweries">
+    {{brewery.name}} --- {{brewery.srm}} --- {{brewery.ibu}}
+</div>
+
 <div ng-if="beers[0] === 'true' && $index > 0" ng-repeat="beer in beers | limitTo : 5">
     {{beer.name}} --- {{beer.ibu}} --- {{beer.srm}} --- {{beer.brewery.name}}
+    this one
 </div>
 
 <div ng-if="!search.location">

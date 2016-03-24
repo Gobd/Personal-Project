@@ -8,6 +8,7 @@ angular.module('app')
       $scope.goHome = function(){
           $location.search({});
           $scope.search = {};
+          $scope.breweries = {};
           search();
       };
 
@@ -28,6 +29,7 @@ angular.module('app')
                                     $scope.beers.push(beer);
                                 })
                             });
+                            delete $scope.brewery.beers;
                         });
                     } else {
                         locationService.getAddressFromCoords().then(function(res){

@@ -38,7 +38,6 @@ function distance(origin, locs, res) {
                 obj.distance = body.rows[0].elements[idx].distance.text;
                 obj.travelTime = body.rows[0].elements[idx].duration.text;
             });
-            console.log(locs);
             res.status(200).json(locs);
         } else {
             res.status(500).json(error);
