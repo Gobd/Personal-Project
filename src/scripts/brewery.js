@@ -1,5 +1,6 @@
 angular.module('app')
-  .controller('addBrewery', function($scope, locationService) {
+  .controller('addBrewery', function($scope, locationService, $rootScope) {
+      $rootScope.showsearchscope = false;
 
       $scope.addBrewery = function(breweryAdd){
         breweryAdd.loc = {};

@@ -1,5 +1,5 @@
 angular.module('app')
-  .controller('homeCtrl', function($scope) {
-
+  .controller('homeCtrl', function($scope, $rootScope) {
+      $rootScope.showsearchscope = true;
 
 });
