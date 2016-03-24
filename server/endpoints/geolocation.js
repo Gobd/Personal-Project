@@ -103,8 +103,6 @@ module.exports = {
         });
         },
 
-    //if there is no location search without it, we need to search with beer or name, with or without locations
-    //so we have 4 possibilites
     getBrewery: function (req, res) {
         var reg;
         req.query = _.omitBy(req.query, _.isEmpty);

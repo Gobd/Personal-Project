@@ -8,11 +8,12 @@ angular.module('app')
       $scope.goHome = function(){
           $location.search({});
           $scope.search = {};
-          $scope.breweries = {};
+          $scope.brewery = {};
           search();
       };
 
     function search(){
+        // $scope.brewery = [1,2,3];
         if($scope.isAuthenticated() && isEmpty($location.search())){
             Account.getProfile()
                 .then(function(response) {
@@ -47,6 +48,8 @@ angular.module('app')
                 $scope.brewery = res.data;
             })
         } else {
+            $scope.search = {};
+            $scope.search.location = 'Searching...';
             locationService.getAddressFromCoords().then(function(res){
                 $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
                 $scope.search = {};
@@ -68,7 +71,7 @@ angular.module('app')
       search();
 
       $scope.getBrewery = function(search){
-          $scope.brewery = {};
+          $scope.brewery = 'stuff';
           locationService.getBrewery(search).then(function(res){
               $scope.brewery = res.data;
           });
