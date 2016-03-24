@@ -3,10 +3,11 @@ angular.module('app')
         $rootScope.showsearchscope = false;
 
         $scope.addBeer = function(beerToAdd){
+            console.log(beerToAdd)
             beerToAdd.brewery = $stateParams.id;
             locationService.addBeer(beerToAdd).then(function(res){
                 $scope.addedBeer = res.data;
-            })
-        }
+            });
+        };
 
     });

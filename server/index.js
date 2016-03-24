@@ -50,10 +50,10 @@ app.get('/breweryDetail/:id', geolocation.breweryDetail);
 //need a put and delete for this route
 
 app.get('/getBrewery', geolocation.getBrewery);
-app.post('/addBrewery', geolocation.addBrewry);
+app.post('/addBrewery', checkRole('user'), geolocation.addBrewery);
 //need a put and delete for this route
 
-app.post('/addBeer', geolocation.addBeer);
+app.post('/addBeer', checkRole('user'), geolocation.addBeer);
 //need a put, delete, and get for this route
 
 app.post('/review', checkRole('user'), geolocation.addReview);

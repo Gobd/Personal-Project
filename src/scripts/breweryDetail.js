@@ -8,6 +8,7 @@ angular.module('app')
 
         $scope.addBeer = function(beerToAdd){
             beerToAdd.brewery = $scope.detail._id;
+            beerToAdd.address = $scope.detail.address;
             beerToAdd.loc = $scope.detail.loc;
             locationService.addBeer(beerToAdd).then(function(res){
                 $scope.addedBeer = res.data;

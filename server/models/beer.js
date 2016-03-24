@@ -7,6 +7,7 @@ var beerSchema = new mongoose.Schema({
     name: String,
     srm: Number,
     ibu: Number,
+    address : String,
     brewery: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     loc: {
