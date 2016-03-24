@@ -30,6 +30,25 @@ var milesToMeters = function (miles) {
     return miles * 1609.34;
 };
 
+var makeQuery = function(location, search){
+    var query = {
+        "loc": {
+            $geoNear: {
+                $geometry: {type: "Point", coordinates: location},
+                $maxDistance: milesToMeters(100)
+            }
+        }
+    };
+    if (search){
+        _.merge(query, search);
+    }
+    return query;
+};
+
+var makeRegex = function(search){
+    return new RegExp('\\w*(' + search + ')\\w*', "ig");
+};
+
 module.exports = {
 
     getAddress: function (req, res) {
@@ -47,14 +66,7 @@ module.exports = {
     getRand: function(req, res){
         geocoder.geocode(req.query.location, function (err, resp) {
             var location = [resp[0].longitude, resp[0].latitude];
-            var query = {
-                "loc": {
-                    $geoNear: {
-                        $geometry: {type: "Point", coordinates: location},
-                        $maxDistance: milesToMeters(100)
-                    }
-                }
-            };
+            var query = makeQuery(location);
             Location
                 .find(query)
                 .deepPopulate('beers.brewery')
@@ -70,20 +82,20 @@ module.exports = {
         var reg;
         req.query = _.omitBy(req.query, _.isEmpty);
         if (req.query.name && !req.query.location) {
-            reg = new RegExp('\\w*(' + req.query.name + ')\\w*', "ig");
+            reg = makeRegex(req.query.name);
                     Location.find({name: reg}, function(err, resp){
                         err ? res.status(500).json(err) : res.status(200).json(resp);
                     });
             } else if (req.query.beer && !req.query.location) {
-            reg = new RegExp('\\w*(' + req.query.beer + ')\\w*', "ig");
+            reg = makeRegex(req.query.beer);
             Beer.find({name: reg}, function(err, resp){
                 err ? res.status(500).json(err) : res.status(200).json(resp);
             });
         } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
-                reg = new RegExp('\\w*(' + req.query.name + ')\\w*', "ig");
-                var distPromise = Location.find({name: reg}).lean();
+                reg = makeRegex(req.query.name);
+                var distPromise = Location.find(makeQuery(location, {name: reg})).lean();
                 distPromise.then(function (resp) {
                     _.forEach(resp, function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
@@ -96,9 +108,9 @@ module.exports = {
             });
         } else if (req.query.beer && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
-                reg = new RegExp('\\w*(' + req.query.beer + ')\\w*', "ig");
+                reg = makeRegex(req.query.beer);
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Beer.find({name: reg}).lean();
+                var distPromise = Beer.find(makeQuery(location, {name: reg})).lean();
                 distPromise.then(function (resp) {
                     _.forEach(resp, function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
@@ -112,7 +124,7 @@ module.exports = {
         } else if (!req.query.beer && !req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Location.find({}).lean();
+                var distPromise = Location.find(makeQuery(location)).lean();
                 distPromise.then(function (resp) {
                     _.forEach(resp, function (obj, idx) {
                         dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
