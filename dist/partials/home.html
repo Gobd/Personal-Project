@@ -8,11 +8,10 @@
     {{brewery.name}} --- {{brewery.srm}} --- {{brewery.ibu}}
 </div>
 
-<div ng-if="beers[0] === 'true' && $index > 0" ng-repeat="beer in beers | limitTo : 5">
+<div ng-if="beers[0] === 'true' && $index > 0 && !search.name  && !search.beer" ng-repeat="beer in beers | limitTo : 5">
     {{beer.name}} --- {{beer.ibu}} --- {{beer.srm}} --- {{beer.brewery.name}}
-    this one
 </div>
 
-<div ng-if="!search.location">
+<div ng-if="search.location === 'Searching...'">
     Waiting on location
 </div>

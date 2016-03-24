@@ -77,6 +77,8 @@ angular.module('app')
     $scope.nearMe = function(){
         $scope.brewery = {};
         $scope.search = {};
+        $scope.search.location = 'Searching...';
+        $location.search({});
         $scope.beers[0] = false;
         locationService.getAddressFromCoords().then(function(res){
             $scope.coords = {lat: res.data[0].latitude, lon: res.data[0].longitude};
