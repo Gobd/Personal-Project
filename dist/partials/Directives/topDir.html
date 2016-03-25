@@ -7,19 +7,28 @@
     <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
-    <li ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
-      <li id="locationLi"><label for="location"><i ng-click="nearMe()" class="fa fa-compass fa-lg grow"></i> Near: </label>
-          <input id="location" class="form-control" name="location" type="text" ng-model="search.location"></li>
-      <li><i ng-click="showsearch = !showsearch" class="fa fa-search fa-3x grow"></i></li>
+    <li id="compasspadding" ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
+<i id="compass" ng-click="nearMe()" class="fa fa-compass fa-lg grow"></i>
+      <li id="locationLi">
+        <md-input-container>
+          <label>Near</label>
+          <input id="location" ng-model="search.location">
+        </md-input-container></li>
+      <li><i ng-click="showsearch = !showsearch" class="fa fa-search fa-2x grow"></i></li>
   </ul>
 </div>
 
   <div ng-if="showsearch" id="search">
     <form name="searchForm">
-      <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }' placeholder="Search by brewery...">
-      OR
-      <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }' placeholder="Search by beer...">
+      <md-input-container>
+        <label>Search by brewery...</label>
+        <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }'>
+      </md-input-container>
 
+      <md-input-container>
+        <label>Search by beer...</label>
+        <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }'>
+      </md-input-container>
       <div>Type to search</div>
     </form>
   </div>

@@ -1,5 +1,4 @@
 @import 'jeet'
-@import 'bootstrap'
 @import 'rupture'
 
 //edit()
@@ -42,6 +41,9 @@ h4
   &:hover
     transform scale(1.1)
 
+.md-errors-spacer
+  display none
+
 body
   padding 15px
 .cont
@@ -57,11 +59,13 @@ body
       align-items center
       justify-content space-around
       width 100%
-      input
-        margin-right 15px
+      md-input-container
         width 60%
         +below(625px)
           width 100%
+      input
+        margin-right 15px
+        width 100%
   #nav
     padding-top 15px
     ul
@@ -71,14 +75,8 @@ body
       width 100%
       padding 0
       list-style-type none
-      #location
-        padding-left 52px
-      input
-        width 150%
-        margin-right 15px
-      label
-        position absolute
-        transform translate(12px, 7px)
+      i
+        cursor pointer
       img
         height 50px
         transform rotate(90deg)
@@ -86,17 +84,17 @@ body
         display inline-block
         &:not(:first-child)
           padding-left 25px
-      i
-        animation: pulsate 1s ease-out;
-        animation-iteration-count: 3;
-        cursor pointer
-      #locationLi
-        width 35%
-      #location
-        padding-left 75px
-      input
-        width 100%
-        margin-right 15px
-      label
+      #compasspadding
+        padding-right 25px
+      #compass
         position absolute
-        transform translate(8px, 7px)
+        transform translate(0, 30px)
+        transition all .2s ease-in-out
+        &:hover
+          transform scale(1.1) translate(0, 27px)
+      #locationLi
+        width 30%
+        md-input-container
+         width 100%
+        input
+          width 100%

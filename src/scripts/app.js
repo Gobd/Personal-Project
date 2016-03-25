@@ -1,4 +1,4 @@
-angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'satellizer', 'toastr'])
+angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'satellizer', 'toastr', 'ngMaterial'])
 
   .config(function($authProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
 

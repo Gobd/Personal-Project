@@ -16,8 +16,7 @@ const
 , jeet = require('jeet')
 , nodemon = require('nodemon')
 , rupture = require('rupture')
-, processors = [autoprefixer()]
-, bootstrap = require('bootstrap-styl');
+, processors = [autoprefixer()];
 
 gulp.task('server', function(){
   gulp.src('./dist')
@@ -30,7 +29,7 @@ gulp.task('server', function(){
 gulp.task('stylus', function(){
   gulp.src('./src/styles/*.styl')
   .pipe(sourcemaps.init())
-  .pipe(stylus({use: [jeet(), bootstrap(), rupture()]}))
+  .pipe(stylus({use: [jeet(), rupture()]}))
   .pipe(postcss(processors))
   .pipe(cleanCSS())
   .pipe(concat('css.min.css'))

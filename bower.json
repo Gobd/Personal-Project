@@ -24,6 +24,7 @@
     "angular-resource": "^1.5.0",
     "angular-messages": "^1.5.0",
     "angular-toastr": "^1.7.0",
-    "font-awesome": "fontawesome#^4.5.0"
+    "font-awesome": "fontawesome#^4.5.0",
+    "angular-material": "^1.0.6"
   }
 }
