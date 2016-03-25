@@ -7,8 +7,10 @@
             <md-card-title-text>
                 <span class="md-headline">{{beer.name || brewery.name}}</span>
                 <span class="md-subhead">rating</span>
-                <span ng-if="detail" class="md-subhead"><ng-pluralize count='beer.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{beer.reviews.length}} Reviews'}"></ng-pluralize></span>
+                <span class="md-subhead"><ng-pluralize count='beer.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{beer.reviews.length}} Reviews'}"></ng-pluralize></span>
+                <span class="md-subhead"><ng-pluralize count='brewery.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{brewery.reviews.length}} Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead">{{beer.brewery.name}}</span>
+                <span class="md-subhead">{{beer.travelTime}} away</span>
             </md-card-title-text>
             <md-card-title-text>
                 <span class="md-subhead">IBU : {{brewery.ibu || beer.ibu}}</span>

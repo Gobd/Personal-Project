@@ -10,9 +10,12 @@ angular.module('app')
             beerToAdd.brewery = $scope.detail._id;
             beerToAdd.address = $scope.detail.address;
             beerToAdd.loc = $scope.detail.loc;
+            $scope.detail.beers.push(beerToAdd);
             locationService.addBeer(beerToAdd).then(function(res){
                 $scope.addedBeer = res.data;
-            })
-        }
+            });
+        };
+
+
 
     });

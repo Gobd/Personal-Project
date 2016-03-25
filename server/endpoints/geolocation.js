@@ -27,6 +27,15 @@ var request = requestExt({
     ]
 });
 
+function addReviewCount(brewery){
+        return _.forEach(brewery, function(brewery){
+            brewery.reviewCount = 0;
+            _.forEach(brewery.beers, function(beer){
+                brewery.reviewCount += beer.reviews.length;
+            });
+        });
+}
+
 function distance(origin, locs, res) {
     var params = {
         units: 'imperial',
@@ -102,7 +111,19 @@ module.exports = {
                 .deepPopulate('beers.brewery')
                 .lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : distance(req.query.location, (_.shuffle(_.sampleSize(resp, 5))), res);
+                    var ret = _.shuffle(_.sampleSize(resp, 5));
+                    var beers = [];
+                    _.forEach(ret, function(brewery){
+                        brewery.reviewCount = 0;
+                        _.forEach(brewery.beers, function(beer){
+                            brewery.reviewCount += beer.reviews.length;
+                            beer.address = beer.brewery.address;
+                            beers.push(beer);
+                        });
+                        delete brewery.beers;
+                    });
+                    ret = _.concat(ret, beers);
+                    err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
         });
         },
@@ -112,8 +133,9 @@ module.exports = {
         req.query = _.omitBy(req.query, _.isEmpty);
         if (req.query.name && !req.query.location) {
             reg = makeRegex(req.query.name);
-                    Location.find({name: reg}).lean().exec(function(err, resp){
-                        err ? res.status(500).json(err) : res.status(200).json(resp);
+                    Location.find({name: reg}).deepPopulate('beers.brewery').lean().exec(function(err, resp){
+                        var ret = addReviewCount(resp);
+                        err ? res.status(500).json(err) : res.status(200).json(ret);
                     });
             } else if (req.query.beer && !req.query.location) {
                 reg = makeRegex(req.query.beer);
@@ -125,9 +147,10 @@ module.exports = {
                 if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
                 reg = makeRegex(req.query.name);
-                Location.find(makeQuery(location, {name: reg})).lean()
+                Location.find(makeQuery(location, {name: reg})).deepPopulate('beers.brewery').lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : distance(req.query.location, resp, res);
+                    var ret = addReviewCount(resp);
+                    err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
             });
         } else if (req.query.beer && req.query.location) {
@@ -144,9 +167,10 @@ module.exports = {
             geocoder.geocode(req.query.location, function (err, resp) {
                 if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
-                Location.find(makeQuery(location)).lean()
+                Location.find(makeQuery(location)).deepPopulate('beers.brewery').lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : distance(req.query.location, resp, res);
+                    var ret = addReviewCount(resp);
+                    err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
             });
         }

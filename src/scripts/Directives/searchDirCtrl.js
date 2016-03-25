@@ -9,6 +9,7 @@ angular.module('app')
           $location.search({});
           $scope.search = {};
           $scope.brewery = {};
+          $scope.beers = {};
           search();
       };
 
@@ -23,15 +24,8 @@ angular.module('app')
                         locationService.getRand({location: $scope.user.home}).then(function(res){
                             $scope.search = {};
                             $scope.search.location = $scope.user.home;
-                            $scope.brewery = res.data;
-                            $scope.beers = [];
-                            $scope.beers.push('true');
-                            $scope.brewery.forEach(function(brewery){
-                                brewery.beers.forEach(function(beer){
-                                    $scope.beers.push(beer);
-                                })
-                            });
-                            delete $scope.brewery.beers;
+                            $scope.brewery = res.data.splice(0, 5, 'true');
+                            $scope.beers = res.data;
                         });
                     } else {
                         locationService.getAddressFromCoords().then(function(res){
@@ -39,15 +33,15 @@ angular.module('app')
                             $scope.search.location = res.data[0].formattedAddress;
                             locationService.addHome({userId: $scope.user._id,home: res.data[0].formattedAddress}).then(function(resp){
                                 $scope.brewery = resp.data;
-                            })
-                        })
+                            });
+                        });
                     }
-                })
+                });
         } else if (!isEmpty($location.search())) {
             locationService.getBrewery($location.search()).then(function(res){
                 $scope.search = $location.search();
                 $scope.brewery = res.data;
-            })
+            });
         } else {
             $scope.search = {};
             $scope.search.location = 'Searching...';
@@ -56,14 +50,8 @@ angular.module('app')
                 $scope.search = {};
                 $scope.search.location = res.data[0].formattedAddress;
                 locationService.getRand($scope.search).then(function(res){
-                    $scope.brewery = res.data;
-                    $scope.beers = [];
-                    $scope.beers.push('true');
-                    $scope.brewery.forEach(function(brewery){
-                        brewery.beers.forEach(function(beer){
-                            $scope.beers.push(beer);
-                        })
-                    });
+                    $scope.brewery = res.data.splice(0, 5, 'true');
+                    $scope.beers = res.data;
                 });
             });
         }
@@ -95,7 +83,7 @@ angular.module('app')
     };
 
     function isEmpty(obj) {
-      return (Object.keys(obj).length === 0)
+      return (Object.keys(obj).length === 0);
     }
 
   });
