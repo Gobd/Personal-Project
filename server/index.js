@@ -80,7 +80,7 @@ function checkRole(role) {
       return res.status(401).send({
         message: 'Token has expired'
       });
-    } else if (_(userRoles).indexOf(payload.role) >= _(userRoles).indexOf(role)) {
+    } else if (_.indexOf(payload.role, userRoles) >= _.indexOf(role, userRoles)) {
       req.user = payload.sub;
       next();
     } else {

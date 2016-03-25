@@ -14,7 +14,6 @@ var geocoderProvider = 'google',
     User = require('../models/user.js'),
     request = require('request'),
     qs = require('querystring'),
-    rp = require('request-promise'),
     deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 function distance(origin, locs, res) {
@@ -68,13 +67,6 @@ var makeRegex = function(search){
     return new RegExp('\\w*(' + search + ')\\w*', "ig");
 };
 
-var addDistance = function(res, location){
-    return _.forEach(res, function (obj) {
-        dist = distance(location[1], location[0], obj.loc.coordinates[1], obj.loc.coordinates[0]);
-        obj.distance = dist;
-    });
-};
-
 module.exports = {
 
     getAddress: function (req, res) {
@@ -112,10 +104,10 @@ module.exports = {
                         err ? res.status(500).json(err) : res.status(200).json(resp);
                     });
             } else if (req.query.beer && !req.query.location) {
-            reg = makeRegex(req.query.beer);
-            Beer.find({name: reg}, function(err, resp){
-                err ? res.status(500).json(err) : res.status(200).json(resp);
-            });
+                reg = makeRegex(req.query.beer);
+                Beer.find({name: reg}, function(err, resp){
+                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                });
         } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 if (err) res.status(500).json(err);
@@ -185,6 +177,7 @@ module.exports = {
     },
 
     addReview: function(req, res){
+        req.body.userId = req.user;
         Review.create(req.body, function(err, resp){
             var reviewId = resp._id;
             Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
