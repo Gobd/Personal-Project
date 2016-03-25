@@ -12,37 +12,49 @@ var geocoderProvider = 'google',
     mongoose = require('mongoose'),
     Promise = require('bluebird'),
     User = require('../models/user.js'),
-    request = require('request'),
     qs = require('querystring'),
-    deepPopulate = require('mongoose-deep-populate')(mongoose);
+    deepPopulate = require('mongoose-deep-populate')(mongoose),
+    requestExt = require('request-extensible'),
+    RequestHttpCache = require('request-http-cache');
 
-// function distance(origin, locs, res) {
-//     var params = {
-//         units: 'imperial',
-//         mode: 'driving',
-//         origins: origin,
-//         destinations: '',
-//         key: config.distance
-//     };
-//     _.forEach(locs, function(obj){
-//         params.destinations += obj.address + '|';
-//     });
-//     request({
-//         url: "https://maps.googleapis.com/maps/api/distancematrix/json",
-//         qs: params
-//     }, function (error, response, body) {
-//         if (!error && response.statusCode == 200) {
-//             body = JSON.parse(body);
-//             _.forEach(locs, function(obj, idx){
-//                 obj.distance = body.rows[0].elements[idx].distance.text;
-//                 obj.travelTime = body.rows[0].elements[idx].duration.text;
-//             });
-//             res.status(200).json(locs);
-//         } else {
-//             res.status(500).json(error);
-//         }
-//     });
-// }
+var httpRequestCache = new RequestHttpCache({
+    max: 1024*51200
+});
+
+var request = requestExt({
+    extensions: [
+        httpRequestCache.extension
+    ]
+});
+
+function distance(origin, locs, res) {
+    var params = {
+        units: 'imperial',
+        mode: 'driving',
+        origins: origin,
+        destinations: '',
+        key: config.distance
+    };
+    _.forEach(locs, function(obj){
+        params.destinations += obj.address + '|';
+    });
+    request({
+        url: "https://maps.googleapis.com/maps/api/distancematrix/json",
+        qs: params
+    }, function (error, response, body) {
+        console.log(response);
+        if (!error && response.statusCode == 200) {
+            body = JSON.parse(body);
+            _.forEach(locs, function(obj, idx){
+                obj.distance = body.rows[0].elements[idx].distance.text;
+                obj.travelTime = body.rows[0].elements[idx].duration.text;
+            });
+            res.status(200).json(locs);
+        } else {
+            res.status(500).json(error);
+        }
+    });
+}
 
 var milesToMeters = function (miles) {
     return miles * 1609.34;

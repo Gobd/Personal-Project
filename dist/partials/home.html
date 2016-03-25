@@ -1,20 +1,9 @@
-<div ng-if="breweries.none">Nothing Found</div>
+<brewery-dir ng-if="search.name || (!search.name  && !search.beer)" ng-repeat="brewery in breweries"></brewery-dir>
 
-<!--these two are for brewery and beer searches, the first also covers random breweries-->
-<div ng-if="search.name || (!search.name  && !search.beer)" ng-repeat="brewery in breweries">
-    <a href="/#/breweryDetail/{{brewery.name}}">{{brewery.name}}</a>
-</div>
+<beer-dir ng-if="search.beer" ng-repeat="brewery in breweries"></beer-dir>
 
-<div ng-if="search.beer" ng-repeat="brewery in breweries">
-    {{brewery.name}} --- {{brewery.srm}} --- {{brewery.ibu}}
-</div>
+<beer-dir ng-if="beers[0] === 'true' && $index > 0 && !search.name  && !search.beer" ng-repeat="beer in beers | limitTo : 5"></beer-dir>
 
-<!--this displays beers on the random search-->
-<div ng-if="beers[0] === 'true' && $index > 0 && !search.name  && !search.beer" ng-repeat="beer in beers | limitTo : 5">
-    {{beer.name}} --- {{beer.ibu}} --- {{beer.srm}} --- {{beer.brewery.name}}
-</div>
-
-<!--these two are for when nothing is found-->
 <div ng-if="search.name && !breweries.length">
     No breweries found, would you like to add one?
 </div>

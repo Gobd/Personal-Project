@@ -6,18 +6,12 @@ var express = require('express'),
   mongoose = require('mongoose'),
   config = require('./config'),
   jwt = require('jwt-simple'),
-  request = require('request'),
   moment = require('moment'),
-  qs = require('querystring'),
-  User = require('./models/user.js'),
   accounts = require('./endpoints/accounts.js'),
   geolocation = require('./endpoints/geolocation.js'),
   _ = require('lodash'),
   helmet = require('helmet'),
   app = express();
-
-app.enable('trust proxy');
-mongoose.Promise = require('bluebird');
 
 mongoose.connect('mongodb://localhost/personal');
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));

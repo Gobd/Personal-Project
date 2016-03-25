@@ -1,0 +1,31 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-media>
+                <div class="md-media-lg card-media"><img src="http://placehold.it/100x100"></div>
+            </md-card-title-media>
+            <md-card-title-text>
+                <span class="md-headline">
+                    <a ng-if="!detail" href="/#/breweryDetail/{{brewery.name}}">{{brewery.name || detail.name}}</a>
+                    <a ng-if="detail">{{detail.name}}</a>
+                </span>
+                <span class="md-subhead">rating</span>
+                <span class="md-subhead">{{brewery.address || detail.address}}</span>
+                <span class="md-subhead">{{brewery.travelTime || detail.travelTime}} away</span>
+            </md-card-title-text>
+            <md-card-title-text>
+                <span class="md-subhead">phone</span>
+                <span ng-if="!detail" class="md-subhead">hours for current day</span>
+                <span ng-if="detail" class="md-subhead">mon hours</span>
+                <span ng-if="detail" class="md-subhead">tues hours</span>
+                <span ng-if="detail" class="md-subhead">wed hours</span>
+                <span ng-if="detail" class="md-subhead">thur hours</span>
+                <span ng-if="detail" class="md-subhead">fri hours</span>
+                <span ng-if="detail" class="md-subhead">sat hours</span>
+                <span ng-if="detail" class="md-subhead">sun hours</span>
+            </md-card-title-text>
+        </md-card-title>
+    </md-card>
+
+    <div ng-if="detail">{{detail}}</div>
+</div>

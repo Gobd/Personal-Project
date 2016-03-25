@@ -1,0 +1,21 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-media>
+                <div class="md-media-lg card-media"><img src="http://placehold.it/100x100"></div>
+            </md-card-title-media>
+            <md-card-title-text>
+                <span class="md-headline">{{beer.name || brewery.name}}</span>
+                <span class="md-subhead">rating</span>
+                <span class="md-subhead">{{beer.brewery.name}}</span>
+            </md-card-title-text>
+            <md-card-title-text>
+                <span class="md-subhead">{{brewery.ibu || beer.ibu}}</span>
+                <span class="md-subhead">{{brewery.srm || beer.srm}}</span>
+                <span class="md-subhead">% al</span>
+            </md-card-title-text>
+        </md-card-title>
+    </md-card>
+
+    {{brew}}
+</div>
