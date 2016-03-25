@@ -15,7 +15,6 @@ angular.module('app')
       $scope.showsearch = true;
 
     function search(){
-        // $scope.brewery = [1,2,3];
         if($scope.isAuthenticated() && isEmpty($location.search()) && $scope.showsearch){
             Account.getProfile()
                 .then(function(response) {

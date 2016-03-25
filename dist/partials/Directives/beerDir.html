@@ -7,15 +7,28 @@
             <md-card-title-text>
                 <span class="md-headline">{{beer.name || brewery.name}}</span>
                 <span class="md-subhead">rating</span>
+                <span ng-if="detail" class="md-subhead"><ng-pluralize count='beer.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{beer.reviews.length}} Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead">{{beer.brewery.name}}</span>
             </md-card-title-text>
             <md-card-title-text>
-                <span class="md-subhead">{{brewery.ibu || beer.ibu}}</span>
-                <span class="md-subhead">{{brewery.srm || beer.srm}}</span>
+                <span class="md-subhead">IBU : {{brewery.ibu || beer.ibu}}</span>
+                <span class="md-subhead">SRM : {{brewery.srm || beer.srm}}</span>
                 <span class="md-subhead">% al</span>
             </md-card-title-text>
         </md-card-title>
-    </md-card>
 
-    {{brew}}
+    <div ng-if="detail">
+        <button type="button" ng-click="showReviews = !showReviews">Show Reviews</button>
+        <div ng-if="showReviews" ng-repeat="review in beer.reviews">
+            {{review.userId.displayName}} --- {{review.review}}
+        </div>
+
+        <button type="button" ng-click="addReview = !addReview">Add Review</button>
+        <form ng-if="addReview" name="reviewBeerForm" ng-model="beerReview" ng-submit="reviewBeer(beerReview, beer)">
+            <input class="form-control" type="text" ng-model="beerReview.review" placeholder="Review...">
+            <button class="btn btn-default" type="submit">Add</button>
+        </form>
+    </div>
+
+    </md-card>
 </div>

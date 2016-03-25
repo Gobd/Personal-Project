@@ -1,13 +1,6 @@
 <brewery-dir></brewery-dir>
 
-{{detail.name}} --- {{detail.address}}
-
-<div ng-repeat="beer in detail.beers">
-    <a href="/#/reviewBeer/{{beer._id}}">{{beer.name}}</a> --- {{beer.srm}} --- {{beer.ibu}}
-        <div ng-repeat="review in beer.reviews">
-            {{review.userId.displayName}} --- {{review.review}}
-        </div>
-</div>
+<beer-dir ng-repeat="beer in detail.beers track by $index"></beer-dir>
 
 <form name="addBeerForm" ng-model="beerToAdd" ng-submit="addBeer(beerToAdd)">
     <input class="form-control" type="text" ng-model="beerToAdd.name" placeholder="Name...">

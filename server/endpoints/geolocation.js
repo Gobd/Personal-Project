@@ -42,7 +42,6 @@ function distance(origin, locs, res) {
         url: "https://maps.googleapis.com/maps/api/distancematrix/json",
         qs: params
     }, function (error, response, body) {
-        console.log(response);
         if (!error && response.statusCode == 200) {
             body = JSON.parse(body);
             _.forEach(locs, function(obj, idx){
@@ -101,8 +100,9 @@ module.exports = {
             Location
                 .find(query)
                 .deepPopulate('beers.brewery')
+                .lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : res.status(200).json(_.shuffle(_.sampleSize(resp, 5)));
+                    err ? res.status(500).json(err) : distance(req.query.location, (_.shuffle(_.sampleSize(resp, 5))), res);
                 });
         });
         },
@@ -112,12 +112,12 @@ module.exports = {
         req.query = _.omitBy(req.query, _.isEmpty);
         if (req.query.name && !req.query.location) {
             reg = makeRegex(req.query.name);
-                    Location.find({name: reg}, function(err, resp){
+                    Location.find({name: reg}).lean().exec(function(err, resp){
                         err ? res.status(500).json(err) : res.status(200).json(resp);
                     });
             } else if (req.query.beer && !req.query.location) {
                 reg = makeRegex(req.query.beer);
-                Beer.find({name: reg}, function(err, resp){
+                Beer.find({name: reg}).lean().exec(function(err, resp){
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 });
         } else if (req.query.name && req.query.location) {
@@ -125,9 +125,9 @@ module.exports = {
                 if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
                 reg = makeRegex(req.query.name);
-                var distPromise = Location.find(makeQuery(location, {name: reg})).lean();
-                distPromise.then(function (resp) {
-                    distance(req.query.location, resp, res);
+                Location.find(makeQuery(location, {name: reg})).lean()
+                .exec(function (err, resp) {
+                    err ? res.status(500).json(err) : distance(req.query.location, resp, res);
                 });
             });
         } else if (req.query.beer && req.query.location) {
@@ -135,18 +135,18 @@ module.exports = {
                 if (err) res.status(500).json(err);
                 reg = makeRegex(req.query.beer);
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Beer.find(makeQuery(location, {name: reg})).lean();
-                distPromise.then(function (resp) {
-                    distance(req.query.location, resp, res);
+                Beer.find(makeQuery(location, {name: reg})).lean()
+                .exec(function (err, resp) {
+                    err ? res.status(500).json(err) : distance(req.query.location, resp, res);
                 });
             });
         } else if (!req.query.beer && !req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
                 if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
-                var distPromise = Location.find(makeQuery(location)).lean();
-                distPromise.then(function (resp) {
-                    distance(req.query.location, resp, res);
+                Location.find(makeQuery(location)).lean()
+                .exec(function (err, resp) {
+                    err ? res.status(500).json(err) : distance(req.query.location, resp, res);
                 });
             });
         }
@@ -157,6 +157,7 @@ module.exports = {
             Location
                 .findById(req.params.id)
                 .deepPopulate('beers')
+                .lean()
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 });
@@ -164,6 +165,7 @@ module.exports = {
             Location
                 .findOne({name: req.params.id})
                 .deepPopulate('beers.reviews.userId')
+                .lean()
                 .exec(function (err, resp) {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 });
@@ -190,7 +192,9 @@ module.exports = {
 
     addReview: function(req, res){
         req.body.userId = req.user;
+        console.log(req.body);
         Review.create(req.body, function(err, resp){
+            console.log(resp);
             var reviewId = resp._id;
             Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
                 User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){

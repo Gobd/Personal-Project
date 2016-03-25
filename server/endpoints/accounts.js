@@ -25,7 +25,7 @@ module.exports = {
     User.findByIdAndUpdate(req.user, {home: req.body.home}, function(err, resp){
       req.query.location = req.body.home;
       next();
-    })
+    });
   },
 
   getApiMe: function(req, res) {
