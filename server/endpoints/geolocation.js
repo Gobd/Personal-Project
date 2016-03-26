@@ -27,19 +27,47 @@ var request = requestExt({
     ]
 });
 
+function ratingDisp(rat){
+    var ret = [];
+    for (var i = 1; i <= Math.round(rat); i++) {
+        if (rat % 1 === 0){
+            ret.push({half:false});
+        } else if (i < rat) {
+            ret.push({half:false});
+        } else {
+            ret.push({half: true});
+        }
+    }
+    return ret;
+}
+
 function addReviewCount(brewery){
     if (brewery.length > 1) {
         return _.forEach(brewery, function(brewery){
             brewery.reviewCount = 0;
+            brewery.avgRating = 0;
             _.forEach(brewery.beers, function(beer){
                 brewery.reviewCount += beer.reviews.length;
+                _.forEach(beer.reviews, function(review){
+                    if (review.rating)
+                    brewery.avgRating += review.rating;
+                });
             });
+            brewery.avgRating = brewery.avgRating/brewery.reviewCount;
+            brewery.avgRating = ratingDisp(brewery.avgRating);
         });
     } else {
         brewery.reviewCount = 0;
+        brewery.avgRating = 0;
         _.forEach(brewery.beers, function(beer){
+            _.forEach(beer.reviews, function(review){
+                if (review.rating)
+                    brewery.avgRating += review.rating;
+            });
             brewery.reviewCount += beer.reviews.length;
         });
+        brewery.avgRating = brewery.avgRating/brewery.reviewCount;
+        brewery.avgRating = ratingDisp(brewery.avgRating);
         return brewery;
     }
 }
@@ -116,18 +144,25 @@ module.exports = {
             var query = makeQuery(location);
             Location
                 .find(query)
-                .deepPopulate('beers.brewery')
+                .deepPopulate('beers.brewery beers.reviews')
                 .lean()
                 .exec(function (err, resp) {
                     var ret = _.shuffle(_.sampleSize(resp, 5));
                     var beers = [];
                     _.forEach(ret, function(brewery){
                         brewery.reviewCount = 0;
+                        brewery.avgRating = 0;
                         _.forEach(brewery.beers, function(beer){
+                            _.forEach(beer.reviews, function(review){
+                                if (review.rating)
+                                    brewery.avgRating += review.rating;
+                            });
                             brewery.reviewCount += beer.reviews.length;
                             beer.address = beer.brewery.address;
                             beers.push(beer);
                         });
+                        brewery.avgRating = brewery.avgRating/brewery.reviewCount;
+                        brewery.avgRating = ratingDisp(brewery.avgRating);
                         delete brewery.beers;
                     });
                     ret = _.concat(ret, beers);
@@ -141,7 +176,7 @@ module.exports = {
         req.query = _.omitBy(req.query, _.isEmpty);
         if (req.query.name && !req.query.location) {
             reg = makeRegex(req.query.name);
-                    Location.find({name: reg}).deepPopulate('beers.brewery').lean().exec(function(err, resp){
+                    Location.find({name: reg}).deepPopulate('beers.brewery beers.reviews').lean().exec(function(err, resp){
                         var ret = addReviewCount(resp);
                         err ? res.status(500).json(err) : res.status(200).json(ret);
                     });
@@ -155,7 +190,7 @@ module.exports = {
                 if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
                 reg = makeRegex(req.query.name);
-                Location.find(makeQuery(location, {name: reg})).deepPopulate('beers.brewery').lean()
+                Location.find(makeQuery(location, {name: reg})).deepPopulate('beers.brewery beers.reviews').lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
                     err ? res.status(500).json(err) : distance(req.query.location, ret, res);
@@ -175,7 +210,7 @@ module.exports = {
             geocoder.geocode(req.query.location, function (err, resp) {
                 if (err) res.status(500).json(err);
                 var location = [resp[0].longitude, resp[0].latitude];
-                Location.find(makeQuery(location)).deepPopulate('beers.brewery').lean()
+                Location.find(makeQuery(location)).deepPopulate('beers.brewery beers.reviews').lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
                     err ? res.status(500).json(err) : distance(req.query.location, ret, res);

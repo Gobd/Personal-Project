@@ -6,7 +6,7 @@
             </md-card-title-media>
             <md-card-title-text>
                 <span class="md-headline">{{beer.name || brewery.name}}</span>
-                <span class="md-subhead">rating</span>
+                <span class="md-subhead">aggregate rating for beer</span>
                 <span class="md-subhead"><ng-pluralize count='beer.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{beer.reviews.length}} Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead"><ng-pluralize count='brewery.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{brewery.reviews.length}} Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead">{{beer.brewery.name}}</span>
@@ -23,7 +23,7 @@
         <button ng-show="beer.reviews.length" type="button" ng-click="showReviews = !showReviews">Show Reviews</button>
         <div ng-if="!beer.reviews.length">No Reviews!</div>
         <div ng-if="showReviews" ng-repeat="review in beer.reviews">
-            {{review.userId.displayName}} --- {{review.review}}
+            {{review.userId.displayName}} --- {{review.review}} --- review rating
         </div>
 
         <button ng-if="auth" type="button" ng-click="beer.addReview = !beer.addReview">Add Review</button>
