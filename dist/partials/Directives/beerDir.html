@@ -25,7 +25,7 @@
         <div ng-if="showReviews" ng-repeat="review in beer.reviews">
             {{review.userId.displayName}} --- {{review.review}}
         </div>
-{{auth}}
+
         <button ng-if="auth" type="button" ng-click="addReview = !addReview">Add Review</button>
         <form ng-if="addReview" name="reviewBeerForm" ng-model="beerReview" ng-submit="reviewBeer(beerReview, beer)">
             <input class="form-control" type="text" ng-model="beerReview.review" placeholder="Review...">

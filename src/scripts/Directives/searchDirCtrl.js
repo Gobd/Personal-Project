@@ -5,7 +5,9 @@ angular.module('app')
       $scope.isAuthenticated = function() {
           return $auth.isAuthenticated();
       };
-      
+
+      $scope.auth = $auth.isAuthenticated();
+
       $scope.goHome = function(){
           $location.search({});
           $scope.search = {};
