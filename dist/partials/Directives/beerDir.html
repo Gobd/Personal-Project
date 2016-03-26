@@ -29,7 +29,16 @@
         <button ng-if="auth" type="button" ng-click="beer.addReview = !beer.addReview">Add Review</button>
         <form ng-if="beer.addReview" name="reviewBeerForm" ng-model="beerReview" ng-submit="reviewBeer(beerReview, beer)">
             <input class="form-control" type="text" ng-model="beerReview.review" placeholder="Review...">
-            <button class="btn btn-default" type="submit">Add</button>
+            <button class="btn btn-default" ng-disabled="!beerReview.review.length" type="submit">Add</button>
+            <span ng-repeat="rating in ratings track by $index">
+                <span ng-if="!rating.isActive && $index<5" ng-click="ratingFunc($index)">
+                    <i class="fa fa-star-o fa-2x"></i>
+                </span>
+                <span ng-if="rating.isActive && $index<5" ng-click="ratingFunc($index)" class="fa-stack fa-1x">
+                   <i class="fa fa-star color fa-stack-2x"></i>
+                  <i class="fa fa-star-o fa-stack-2x"></i>
+                </span>
+            </span>
         </form>
     </div>
 

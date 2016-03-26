@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 var reviewSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     beerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Beer' },
+    rating: Number,
     review: String
 });
 
