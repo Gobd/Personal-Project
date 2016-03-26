@@ -6,10 +6,11 @@
             </md-card-title-media>
             <md-card-title-text>
                 <span class="md-headline">
-                    <a ng-if="!detail" href="/#/breweryDetail/{{brewery.name}}">{{brewery.name || detail.name}}</a>
+                    <a ng-if="!detail" href="/#/breweryDetail/{{brewery.name}}">{{brewery.name}}</a>
                     <a ng-if="detail">{{detail.name}}</a>
                 </span>
                 <span class="md-subhead">rating</span>
+                <span class="md-subhead"><ng-pluralize count='detail.reviewCount' when="{'0': 'No Beer Reviews','1': '1 Beer Review','other': '{{detail.reviewCount}} Beer Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead"><ng-pluralize count='brewery.reviewCount' when="{'0': 'No Beer Reviews','1': '1 Beer Review','other': '{{brewery.reviewCount}} Beer Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead">{{brewery.address || detail.address}}</span>
                 <span class="md-subhead">{{brewery.travelTime || detail.travelTime}} away</span>

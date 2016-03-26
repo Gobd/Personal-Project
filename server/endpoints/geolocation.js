@@ -28,12 +28,20 @@ var request = requestExt({
 });
 
 function addReviewCount(brewery){
+    if (brewery.length > 1) {
         return _.forEach(brewery, function(brewery){
             brewery.reviewCount = 0;
             _.forEach(brewery.beers, function(beer){
                 brewery.reviewCount += beer.reviews.length;
             });
         });
+    } else {
+        brewery.reviewCount = 0;
+        _.forEach(brewery.beers, function(beer){
+            brewery.reviewCount += beer.reviews.length;
+        });
+        return brewery;
+    }
 }
 
 function distance(origin, locs, res) {
@@ -91,6 +99,7 @@ module.exports = {
 
     getAddress: function (req, res) {
         geocoder.reverse({lat: req.query.lat, lon: req.query.long}, function (err, resp) {
+            console.log(err, resp);
             err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
@@ -102,6 +111,7 @@ module.exports = {
     },
 
     getRand: function(req, res){
+        console.log(req.body)
         geocoder.geocode(req.query.location, function (err, resp) {
             if (err) res.status(500).json(err);
             var location = [resp[0].longitude, resp[0].latitude];
@@ -180,18 +190,20 @@ module.exports = {
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Location
                 .findById(req.params.id)
-                .deepPopulate('beers')
+                .deepPopulate('beers.reviews')
                 .lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                    var ret = addReviewCount(resp);
+                    err ? res.status(500).json(err) : res.status(200).json(ret);
                 });
         } else {
             Location
                 .findOne({name: req.params.id})
-                .deepPopulate('beers.reviews.userId')
+                .deepPopulate('beers.reviews')
                 .lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                    var ret = addReviewCount(resp);
+                    err ? res.status(500).json(err) : res.status(200).json(ret);
                 });
         }
     },

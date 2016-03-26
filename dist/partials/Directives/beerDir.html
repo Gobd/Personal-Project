@@ -20,12 +20,13 @@
         </md-card-title>
 
     <div ng-if="detail">
-        <button type="button" ng-click="showReviews = !showReviews">Show Reviews</button>
+        <button ng-show="beer.reviews.length" type="button" ng-click="showReviews = !showReviews">Show Reviews</button>
+        <div ng-if="!beer.reviews.length">No Reviews!</div>
         <div ng-if="showReviews" ng-repeat="review in beer.reviews">
             {{review.userId.displayName}} --- {{review.review}}
         </div>
 
-        <button type="button" ng-click="addReview = !addReview">Add Review</button>
+        <button ng-if="auth" type="button" ng-click="addReview = !addReview">Add Review</button>
         <form ng-if="addReview" name="reviewBeerForm" ng-model="beerReview" ng-submit="reviewBeer(beerReview, beer)">
             <input class="form-control" type="text" ng-model="beerReview.review" placeholder="Review...">
             <button class="btn btn-default" type="submit">Add</button>

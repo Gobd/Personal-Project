@@ -57,17 +57,7 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
             url: '/breweryDetail/:id',
             controller: 'breweryDetail',
             templateUrl: 'partials/breweryDetail.html'
-        })
-        .state('addBeer', {
-            url: '/addBeer/:id',
-            controller: 'addBeer',
-            templateUrl: 'partials/addBeer.html'
-        })
-      .state('reviewBeer', {
-          url: '/reviewBeer/:id',
-          controller: 'reviewBeer',
-          templateUrl: 'partials/reviewBeer.html'
-      });
+        });
 
       function skipIfLoggedIn($q, $auth) {
           var deferred = $q.defer();
