@@ -99,7 +99,6 @@ module.exports = {
 
     getAddress: function (req, res) {
         geocoder.reverse({lat: req.query.lat, lon: req.query.long}, function (err, resp) {
-            console.log(err, resp);
             err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
@@ -111,7 +110,6 @@ module.exports = {
     },
 
     getRand: function(req, res){
-        console.log(req.body)
         geocoder.geocode(req.query.location, function (err, resp) {
             if (err) res.status(500).json(err);
             var location = [resp[0].longitude, resp[0].latitude];
@@ -190,7 +188,7 @@ module.exports = {
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Location
                 .findById(req.params.id)
-                .deepPopulate('beers.reviews')
+                .deepPopulate('beers.reviews.userId')
                 .lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
@@ -199,7 +197,7 @@ module.exports = {
         } else {
             Location
                 .findOne({name: req.params.id})
-                .deepPopulate('beers.reviews')
+                .deepPopulate('beers.reviews.userId')
                 .lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
@@ -228,9 +226,7 @@ module.exports = {
 
     addReview: function(req, res){
         req.body.userId = req.user;
-        console.log(req.body);
         Review.create(req.body, function(err, resp){
-            console.log(resp);
             var reviewId = resp._id;
             Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
                 User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){

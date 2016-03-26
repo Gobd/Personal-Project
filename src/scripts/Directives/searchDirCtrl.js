@@ -1,10 +1,11 @@
 angular.module('app')
   .controller('searchDirCtrl', function($scope, locationService, $location, $auth, Account) {
 
+
       $scope.isAuthenticated = function() {
           return $auth.isAuthenticated();
       };
-
+      
       $scope.goHome = function(){
           $location.search({});
           $scope.search = {};
