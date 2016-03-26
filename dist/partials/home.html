@@ -1,9 +1,3 @@
-display for rating
-<span ng-repeat="thing in disp">
-    <i ng-if="!thing.half" class="fa fa-star fa-3x starfull"></i>
-    <i ng-if="thing.half" class="fa fa-star-half fa-3x starfull"></i>
-</span>
-
 <brewery-dir ng-if="search.name || (!search.name  && !search.beer)" ng-repeat="brewery in breweries track by $index"></brewery-dir>
 
 <beer-dir ng-if="search.beer" ng-repeat="brewery in breweries track by $index"></beer-dir>

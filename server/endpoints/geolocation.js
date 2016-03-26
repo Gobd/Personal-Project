@@ -42,16 +42,20 @@ function ratingDisp(rat){
 }
 
 function addReviewCount(brewery){
-    if (brewery.length > 1) {
+    if (_.isArray(brewery)) {
         return _.forEach(brewery, function(brewery){
             brewery.reviewCount = 0;
             brewery.avgRating = 0;
             _.forEach(brewery.beers, function(beer){
+                beer.avgRating = 0;
                 brewery.reviewCount += beer.reviews.length;
                 _.forEach(beer.reviews, function(review){
                     if (review.rating)
-                    brewery.avgRating += review.rating;
+                        beer.avgRating += review.rating;
+                        brewery.avgRating += review.rating;
                 });
+                beer.avgRating = beer.avgRating/beer.reviews.length;
+                beer.avgRating = ratingDisp(beer.avgRating);
             });
             brewery.avgRating = brewery.avgRating/brewery.reviewCount;
             brewery.avgRating = ratingDisp(brewery.avgRating);
@@ -60,14 +64,19 @@ function addReviewCount(brewery){
         brewery.reviewCount = 0;
         brewery.avgRating = 0;
         _.forEach(brewery.beers, function(beer){
+            beer.avgRating = 0;
+            brewery.reviewCount += beer.reviews.length;
             _.forEach(beer.reviews, function(review){
                 if (review.rating)
+                    beer.avgRating += review.rating;
                     brewery.avgRating += review.rating;
             });
-            brewery.reviewCount += beer.reviews.length;
+            beer.avgRating = beer.avgRating/beer.reviews.length;
+            beer.avgRating = ratingDisp(beer.avgRating);
         });
         brewery.avgRating = brewery.avgRating/brewery.reviewCount;
         brewery.avgRating = ratingDisp(brewery.avgRating);
+        console.log(brewery.avgRating);
         return brewery;
     }
 }
