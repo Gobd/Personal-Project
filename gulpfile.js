@@ -50,7 +50,7 @@ gulp.task('bowerCss', function(){
 gulp.task('bowerJs', function(){
   gulp.src(mainBowerFiles('**/*.js'))
   .pipe(sourcemaps.init())
-  .pipe(uglify())
+  // .pipe(uglify())
   .pipe(concat('lib.min.js'))
   .pipe(sourcemaps.write('/maps'))
   .pipe(gulp.dest('./dist/js'));
@@ -59,8 +59,8 @@ gulp.task('bowerJs', function(){
 gulp.task('js', function(){
   gulp.src('./src/scripts/**/*.js')
   .pipe(sourcemaps.init())
-  .pipe(annotate())
-  .pipe(uglify())
+  // .pipe(annotate())
+  // .pipe(uglify())
   .pipe(concat('js.min.js'))
   .pipe(sourcemaps.write('/maps'))
   .pipe(gulp.dest('./dist/js'));

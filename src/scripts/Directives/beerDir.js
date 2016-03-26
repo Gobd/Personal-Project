@@ -4,7 +4,9 @@ angular.module('app').directive('beerDir', function () {
         replace: 'true',
         templateUrl: './partials/Directives/beerDir.html',
         controller: function($scope, $stateParams, locationService){
-            
+
+            $scope.addReview = false;
+
             $scope.addBeer = function(beerToAdd){
                 console.log(beerToAdd);
                 beerToAdd.brewery = $stateParams.id;

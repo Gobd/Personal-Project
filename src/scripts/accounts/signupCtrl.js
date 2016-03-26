@@ -1,6 +1,7 @@
 angular.module('app')
-  .controller('signupCtrl', function($scope, $location, $auth, toastr) {
-    $scope.signup = function() {
+  .controller('signupCtrl', function($scope, $location, $auth, toastr, $rootScope) {
+      $rootScope.showsearchscope = false;
+      $scope.signup = function() {
       $auth.signup($scope.user)
         .then(function(response) {
           $auth.setToken(response);

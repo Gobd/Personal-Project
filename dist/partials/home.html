@@ -1,3 +1,20 @@
+<br>
+vote for rating
+<span ng-repeat="rating in ratings track by $index">
+    <span ng-if="!rating.isActive && $index<5" ng-click="ratingFunc($index)"><i class="fa fa-star-o fa-2x"></i></span>
+    <span ng-if="rating.isActive && $index<5" ng-click="ratingFunc($index)" class="fa-stack fa-1x">
+        <i class="fa fa-star color fa-stack-2x"></i>
+      <i class="fa fa-star-o fa-stack-2x"></i>
+    </span>
+</span>
+
+<br>
+display for rating
+<span ng-repeat="thing in disp">
+    <i ng-if="!thing.half" class="fa fa-star fa-3x starfull"></i>
+    <i ng-if="thing.half" class="fa fa-star-half fa-3x starfull"></i>
+</span>
+
 <brewery-dir ng-if="search.name || (!search.name  && !search.beer)" ng-repeat="brewery in breweries track by $index"></brewery-dir>
 
 <beer-dir ng-if="search.beer" ng-repeat="brewery in breweries track by $index"></beer-dir>
