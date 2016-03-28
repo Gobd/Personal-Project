@@ -83,13 +83,12 @@ angular.module('app')
         return $http({
           method: 'GET',
           params: brewery,
-          url: 'http://localhost:3001/getBrewery' + search
+          url: 'http://localhost:3001/getBrewery'
         });
       } else
         return $http({
           method: 'GET',
-          params: brewery,
-          url: 'http://localhost:3001/getBrewery' + search
+          url: 'http://localhost:3001/getBrewery'
         });
     };
 
@@ -99,6 +98,6 @@ angular.module('app')
               data: beerReview,
               url: 'http://localhost:3001/review'
           });
-      }
+      };
 
   });
