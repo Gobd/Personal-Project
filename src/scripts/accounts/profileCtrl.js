@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('profileCtrl', function($scope, $auth, toastr, Account, $rootScope) {
-      $rootScope.showsearchscope = false;
+  .controller('profileCtrl', function($scope, $auth, toastr, Account) {
+      $scope.showsearchscope = false;
 
       $scope.getProfile = function() {
       Account.getProfile()
