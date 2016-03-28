@@ -41,8 +41,20 @@ function ratingDisp(rat){
     return ret;
 }
 
-function addReviewCount(brewery){
+function addReviewCount(brewery, beerCheck){
+    if (!arguments[1]) beerCheck = false;
     var arr = true;
+    if (beerCheck) {
+        return _.forEach(brewery, function(beer){
+            beer.avgRating = 0;
+            _.forEach(beer.reviews, function(review){
+                if (review.rating)
+                    beer.avgRating += review.rating;
+            });
+            beer.avgRating = beer.avgRating/beer.reviews.length;
+            beer.avgRating = ratingDisp(beer.avgRating);
+        });
+    }
     if (!_.isArray(brewery)) {
         brewery = [brewery];
         arr = false;
@@ -102,7 +114,7 @@ var milesToMeters = function (miles) {
 var makeQuery = function(location, search){
     var query = {
         "loc": {
-            $geoNear: {
+            $near: {
                 $geometry: {type: "Point", coordinates: location},
                 $maxDistance: milesToMeters(100)
             }
@@ -149,10 +161,14 @@ module.exports = {
                         brewery.reviewCount = 0;
                         brewery.avgRating = 0;
                         _.forEach(brewery.beers, function(beer){
+                            beer.avgRating = 0;
                             _.forEach(beer.reviews, function(review){
                                 if (review.rating)
+                                    beer.avgRating += review.rating;
                                     brewery.avgRating += review.rating;
                             });
+                            beer.avgRating = beer.avgRating/beer.reviews.length;
+                            beer.avgRating = ratingDisp(beer.avgRating);
                             brewery.reviewCount += beer.reviews.length;
                             beer.address = beer.brewery.address;
                             beers.push(beer);
@@ -188,6 +204,7 @@ module.exports = {
                 reg = makeRegex(req.query.name);
                 Location.find(makeQuery(location, {name: reg})).deepPopulate('beers.brewery beers.reviews').lean()
                 .exec(function (err, resp) {
+                    console.log(resp);
                     var ret = addReviewCount(resp);
                     err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
@@ -197,9 +214,11 @@ module.exports = {
                 if (err) res.status(500).json(err);
                 reg = makeRegex(req.query.beer);
                 var location = [resp[0].longitude, resp[0].latitude];
-                Beer.find(makeQuery(location, {name: reg})).lean()
+                Beer.find(makeQuery(location, {name: reg})).populate('reviews').lean()
                 .exec(function (err, resp) {
-                    err ? res.status(500).json(err) : distance(req.query.location, resp, res);
+                    var ret = addReviewCount(resp, true);
+                    console.log(ret);
+                    err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
             });
         } else if (!req.query.beer && !req.query.name && req.query.location) {
