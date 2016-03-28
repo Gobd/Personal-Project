@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
   jwt = require('jwt-simple'),
   request = require('request'),
   moment = require('moment'),
-  qs = require('querystring'),
+  qs = require('query-string'),
   User = require('../models/user.js');
 
 mongoose.Promise = require('bluebird');

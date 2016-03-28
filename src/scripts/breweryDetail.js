@@ -2,7 +2,7 @@ angular.module('app')
     .controller('breweryDetail', function($scope, locationService, $stateParams, $rootScope) {
         $rootScope.showsearchscope = false;
 
-        locationService.breweryDetail($stateParams.id).then(function(res){
+        locationService.breweryDetail($stateParams).then(function(res){
             $scope.detail = res.data;
         });
 

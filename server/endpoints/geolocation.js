@@ -1,8 +1,7 @@
 var geocoderProvider = 'google',
-    httpAdapter = 'https',
     config = require('../config'),
     extra = {apiKey: config.maps},
-    geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra),
+    geocoder = require('node-geocoder')(geocoderProvider, 'https', extra),
     Location = require('../models/location.js'),
     _ = require('lodash'),
     BeerConfig = require('../models/beer.js'),
@@ -12,7 +11,7 @@ var geocoderProvider = 'google',
     mongoose = require('mongoose'),
     Promise = require('bluebird'),
     User = require('../models/user.js'),
-    qs = require('querystring'),
+    qs = require('query-string'),
     deepPopulate = require('mongoose-deep-populate')(mongoose),
     requestExt = require('request-extensible'),
     RequestHttpCache = require('request-http-cache');
@@ -80,6 +79,15 @@ function addReviewCount(brewery, beerCheck){
 }
 
 function distance(origin, locs, res) {
+    var arr = true;
+    if (!arguments[0]) {
+        res.status(200).json(locs);
+        return;
+    }
+    if (!_.isArray(locs)) {
+        locs = [locs];
+        arr = false;
+    }
     var params = {
         units: 'imperial',
         mode: 'driving',
@@ -88,7 +96,11 @@ function distance(origin, locs, res) {
         key: config.distance
     };
     _.forEach(locs, function(obj){
-        params.destinations += obj.address + '|';
+        if (obj.address) {
+            params.destinations += obj.address + '|';
+        } else {
+            params.destinations += obj.brewery.address + '|';
+        }
     });
     request({
         url: "https://maps.googleapis.com/maps/api/distancematrix/json",
@@ -100,7 +112,7 @@ function distance(origin, locs, res) {
                 obj.distance = body.rows[0].elements[idx].distance.text;
                 obj.travelTime = body.rows[0].elements[idx].duration.text;
             });
-            res.status(200).json(locs);
+            arr ? res.status(200).json(locs) : res.status(200).json(locs[0]);
         } else {
             res.status(500).json(error);
         }
@@ -152,7 +164,7 @@ module.exports = {
             var query = makeQuery(location);
             Location
                 .find(query)
-                .deepPopulate('beers.brewery beers.reviews')
+                .deepPopulate('beers.reviews, beers.brewery')
                 .lean()
                 .exec(function (err, resp) {
                     var ret = _.shuffle(_.sampleSize(resp, 5));
@@ -194,7 +206,8 @@ module.exports = {
                     });
             } else if (req.query.beer && !req.query.location) {
                 reg = makeRegex(req.query.beer);
-                Beer.find({name: reg}).lean().exec(function(err, resp){
+                Beer.find({name: reg}).deepPopulate('reviews brewery').lean().exec(function(err, resp){
+                    var ret = addReviewCount(resp, true);
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 });
         } else if (req.query.name && req.query.location) {
@@ -204,7 +217,6 @@ module.exports = {
                 reg = makeRegex(req.query.name);
                 Location.find(makeQuery(location, {name: reg})).deepPopulate('beers.brewery beers.reviews').lean()
                 .exec(function (err, resp) {
-                    console.log(resp);
                     var ret = addReviewCount(resp);
                     err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
@@ -214,10 +226,9 @@ module.exports = {
                 if (err) res.status(500).json(err);
                 reg = makeRegex(req.query.beer);
                 var location = [resp[0].longitude, resp[0].latitude];
-                Beer.find(makeQuery(location, {name: reg})).populate('reviews').lean()
+                Beer.find(makeQuery(location, {name: reg})).deepPopulate('reviews brewery').lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp, true);
-                    console.log(ret);
                     err ? res.status(500).json(err) : distance(req.query.location, ret, res);
                 });
             });
@@ -235,6 +246,10 @@ module.exports = {
     },
 
     breweryDetail: function(req, res){
+        var location = false;
+        if (req.query.near){
+            location = req.query.near;
+        }
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
             Location
                 .findById(req.params.id)
@@ -242,7 +257,7 @@ module.exports = {
                 .lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
-                    err ? res.status(500).json(err) : res.status(200).json(ret);
+                    err ? res.status(500).json(err) : distance(location, ret, res);
                 });
         } else {
             Location
@@ -251,7 +266,7 @@ module.exports = {
                 .lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
-                    err ? res.status(500).json(err) : res.status(200).json(ret);
+                    err ? res.status(500).json(err) : distance(location, ret, res);
                 });
         }
     },

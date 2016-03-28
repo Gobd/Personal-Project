@@ -68,10 +68,12 @@ angular.module('app')
           });
       };
 
-      this.breweryDetail = function(id) {
+      this.breweryDetail = function(brewery) {
+          var url;
+          if (brewery.near) {url = 'http://localhost:3001/breweryDetail/' + brewery.id + '?near=' + brewery.near;} else {url = 'http://localhost:3001/breweryDetail/' + brewery.id;}
           return $http({
               method: 'GET',
-              url: 'http://localhost:3001/breweryDetail/' + id
+              url: url
           });
       };
 
@@ -81,13 +83,13 @@ angular.module('app')
         return $http({
           method: 'GET',
           params: brewery,
-          url: 'http://localhost:3001/getBrewery'
+          url: 'http://localhost:3001/getBrewery' + search
         });
       } else
         return $http({
           method: 'GET',
           params: brewery,
-          url: 'http://localhost:3001/getBrewery'
+          url: 'http://localhost:3001/getBrewery' + search
         });
     };
 

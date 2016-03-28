@@ -8,7 +8,7 @@ var locationSchema = new mongoose.Schema({
   address: String,
   beers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Beer' }],
   loc: {
-    type: {type: String, enum: "Point", default: "Point"},
+    type: {type: String, default: "Point"},
     coordinates: [Number]
   }
 });

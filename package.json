@@ -9,12 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.0.0-rc.2",
     "autoprefixer": "^6.3.3",
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.3.4",
     "body-parser": "^1.15.0",
-    "bootstrap-styl": "^5.0.5",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
     "compression": "^1.6.1",
@@ -39,10 +37,9 @@
     "mongoose": "^4.4.7",
     "mongoose-deep-populate": "^3.0.0",
     "node-geocoder": "^3.8.0",
-    "querystring": "^0.2.0",
+    "query-string": "^4.0.2",
     "request-extensible": "^0.1.1",
     "request-http-cache": "^1.0.1",
-    "request-promise": "^2.0.1",
     "rupture": "^0.6.1"
   }
 }

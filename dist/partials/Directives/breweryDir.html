@@ -6,7 +6,7 @@
             </md-card-title-media>
             <md-card-title-text>
                 <span class="md-headline">
-                    <a ng-if="!detail" href="/#/breweryDetail/{{brewery.name}}">{{brewery.name}}</a>
+                    <a ng-if="!detail" ui-sref="breweryDetail({id: brewery.name, near: search.location})">{{brewery.name}}</a>
                     <a ng-if="detail">{{detail.name}}</a>
                 </span>
                 <span class="md-subhead">Rating:

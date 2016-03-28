@@ -54,7 +54,7 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
       templateUrl: 'partials/addBrewery.html'
     })
         .state('breweryDetail', {
-            url: '/breweryDetail/:id',
+            url: '/breweryDetail/:id?near',
             controller: 'breweryDetail',
             templateUrl: 'partials/breweryDetail.html'
         });
