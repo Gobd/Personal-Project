@@ -31,11 +31,11 @@ function ratingDisp(rat){
     var ret = [];
     for (var i = 1; i <= Math.round(rat); i++) {
         if (rat % 1 === 0){
-            ret.push({half:false});
+            ret.push({half:0});
         } else if (i < rat) {
-            ret.push({half:false});
+            ret.push({half:0});
         } else {
-            ret.push({half: true});
+            ret.push({half: 1});
         }
     }
     return ret;
@@ -115,6 +115,7 @@ var makeQuery = function(location, search){
 };
 
 var makeRegex = function(search){
+    if (/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(search)) {search = '.';}
     return new RegExp('\\w*(' + search + ')\\w*', "ig");
 };
 

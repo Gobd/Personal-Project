@@ -6,11 +6,11 @@ angular.module('app').directive('beerDir', function () {
         controller: function($scope, $stateParams, locationService){
 
             $scope.ratings = [
-                {rating:1, isActive: true},
-                {rating:2, isActive: false},
-                {rating:3, isActive: false},
-                {rating:4, isActive: false},
-                {rating:5, isActive: false},
+                {isActive: 1},
+                {isActive: 0},
+                {isActive: 0},
+                {isActive: 0},
+                {isActive: 0},
                 1
             ];
 
