@@ -1,5 +1,5 @@
 angular.module('app')
-  .controller('profileCtrl', function($scope, $auth, toastr, Account) {
+  .controller('profileCtrl', function($scope, $auth, toastr, Account, locationService) {
       $scope.showsearchscope = false;
 
       $scope.getProfile = function() {
@@ -42,4 +42,13 @@ angular.module('app')
     };
 
     $scope.getProfile();
+
+      $scope.editReview = function(editedReview, id){
+          locationService.editReview(editedReview, id);
+      };
+
+      $scope.deleteReview = function(review){
+          locationService.deleteReview(review);
+      };
+
   });

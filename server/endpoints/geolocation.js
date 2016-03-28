@@ -14,7 +14,8 @@ var geocoderProvider = 'google',
     qs = require('query-string'),
     deepPopulate = require('mongoose-deep-populate')(mongoose),
     requestExt = require('request-extensible'),
-    RequestHttpCache = require('request-http-cache');
+    RequestHttpCache = require('request-http-cache'),
+    join = Promise.join;
 
 var httpRequestCache = new RequestHttpCache({
     max: 1024*51200
@@ -291,6 +292,40 @@ module.exports = {
                     err ? res.status(500).json(err) : res.status(200).json(resp);
                 });
             });
+        });
+    },
+
+    editReview: function (req, res) {
+        Review.findById(req.params.id, function(err, resp){
+            if (err){
+                res.status(200).json(err);
+            } else if ((req.user).toString() === (resp.userId).toString()) {
+                resp.update({ $set: req.body}, function(err, resp){
+                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                });
+            } else {
+                res.status(500).json('Not Auth');
+            }
+        });
+    },
+
+    //need to find ref on user and beer to delete
+    deleteReview: function (req, res) {
+        Review.findById(req.params.id, function(err, resp){
+            if (err){
+                res.status(200).json(err);
+            } else if ((req.user).toString() === (resp.userId).toString()) {
+                var reviewRemove = resp.remove;
+                var beerRemove = Beer.findByIdAndUpdate(resp.beerId, {$pull:{reviews:req.params.id}});
+                var userRemove = User.findByIdAndUpdate(resp.userId, {$pull:{reviews:req.params.id}});
+                join(reviewRemove, beerRemove, userRemove, function(user, beer, review){
+                    return [user, beer, review];
+                }).then(function(resp){
+                    res.status(200).json(resp);
+                });
+            } else {
+                res.status(500).json('Not Auth');
+            }
         });
     }
 };

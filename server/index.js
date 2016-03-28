@@ -51,7 +51,8 @@ app.post('/addBeer', checkRole('user'), geolocation.addBeer);
 //need a put, delete, and get for this route
 
 app.post('/review', checkRole('user'), geolocation.addReview);
-//need post put delete, get for reviews
+app.put('/review/:id', checkRole('user'), geolocation.editReview);
+app.delete('/review/:id', checkRole('user'), geolocation.deleteReview);
 
 function checkRole(role) {
   return function(req, res, next) {

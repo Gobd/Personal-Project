@@ -101,4 +101,19 @@ angular.module('app')
           });
       };
 
+      this.editReview = function(editedReview, id){
+          return $http({
+              method: 'PUT',
+              data: editedReview,
+              url: 'http://localhost:3001/review/' + id
+          });
+      };
+
+      this.deleteReview = function(review){
+          return $http({
+              method: 'DELETE',
+              url: 'http://localhost:3001/review/' + review._id
+          });
+      };
+
   });
