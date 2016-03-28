@@ -43,6 +43,7 @@ angular.module('app')
         } else if (!isEmpty($location.search())) {
             locationService.getBrewery($location.search()).then(function(res){
                 $scope.search = $location.search();
+                $scope.beers = {};
                 $scope.brewery = res.data;
             });
         } else {

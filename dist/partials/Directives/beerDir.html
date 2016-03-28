@@ -7,9 +7,9 @@
             <md-card-title-text>
                 <span class="md-headline">{{beer.name || brewery.name}}</span>
                 <span class="md-subhead">Rating:
-                     <span ng-repeat="rating in beer.avgRating || brewery.avgRating">
-                        <i ng-if="!rating.half" class="fa fa-star fa-3x starfull"></i>
-                        <i ng-if="rating.half" class="fa fa-star-half fa-3x starfull"></i>
+                     <span ng-repeat="rating in beer.avgRating || brewery.avgRating track by $index">
+                        <i ng-if="!rating" class="fa fa-star fa-3x starfull"></i>
+                        <i ng-if="rating" class="fa fa-star-half fa-3x starfull"></i>
                     </span>
                 </span>
                 <span class="md-subhead"><ng-pluralize count='beer.reviews.length' when="{'0': 'No Reviews','1': '1 Review','other': '{{beer.reviews.length}} Reviews'}"></ng-pluralize></span>

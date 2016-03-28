@@ -10,9 +10,9 @@
                     <a ng-if="detail">{{detail.name}}</a>
                 </span>
                 <span class="md-subhead">Rating:
-                    <span ng-repeat="rating in detail.avgRating || brewery.avgRating">
-                        <i ng-if="!rating.half" class="fa fa-star fa-3x starfull"></i>
-                        <i ng-if="rating.half" class="fa fa-star-half fa-3x starfull"></i>
+                    <span ng-repeat="rating in detail.avgRating || brewery.avgRating track by $index">
+                        <i ng-if="!rating" class="fa fa-star fa-3x starfull"></i>
+                        <i ng-if="rating" class="fa fa-star-half fa-3x starfull"></i>
                     </span>
                 </span>
                 <span class="md-subhead"><ng-pluralize count='detail.reviewCount' when="{'0': 'No Beer Reviews','1': '1 Beer Review','other': '{{detail.reviewCount}} Beer Reviews'}"></ng-pluralize></span>

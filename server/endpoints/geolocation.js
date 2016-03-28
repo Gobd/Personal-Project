@@ -29,19 +29,16 @@ var request = requestExt({
 function ratingDisp(rat){
     var ret = [];
     for (var i = 1; i <= Math.round(rat); i++) {
-        if (rat % 1 === 0){
-            ret.push({half:0});
-        } else if (i < rat) {
-            ret.push({half:0});
+        if (rat % 1 === 0 || i < rat){
+            ret.push(0);
         } else {
-            ret.push({half: 1});
+            ret.push(1);
         }
     }
     return ret;
 }
 
-function addReviewCount(brewery, beerCheck){
-    if (!arguments[1]) beerCheck = false;
+function addReviewCount(brewery, beerCheck = false){
     var arr = true;
     if (beerCheck) {
         return _.forEach(brewery, function(beer){
@@ -119,16 +116,12 @@ function distance(origin, locs, res) {
     });
 }
 
-var milesToMeters = function (miles) {
-    return miles * 1609.34;
-};
-
 var makeQuery = function(location, search){
     var query = {
         "loc": {
             $near: {
                 $geometry: {type: "Point", coordinates: location},
-                $maxDistance: milesToMeters(100)
+                $maxDistance: 100*1609.34
             }
         }
     };
@@ -208,7 +201,7 @@ module.exports = {
                 reg = makeRegex(req.query.beer);
                 Beer.find({name: reg}).deepPopulate('reviews brewery').lean().exec(function(err, resp){
                     var ret = addReviewCount(resp, true);
-                    err ? res.status(500).json(err) : res.status(200).json(resp);
+                    err ? res.status(500).json(err) : res.status(200).json(ret);
                 });
         } else if (req.query.name && req.query.location) {
             geocoder.geocode(req.query.location, function (err, resp) {
