@@ -42,10 +42,12 @@ function ratingDisp(rat){
 }
 
 function addReviewCount(brewery){
+    var arr = true;
     if (!_.isArray(brewery)) {
         brewery = [brewery];
+        arr = false;
     }
-        return _.forEach(brewery, function(brewery){
+        var ret =  _.forEach(brewery, function(brewery){
             brewery.reviewCount = 0;
             brewery.avgRating = 0;
             _.forEach(brewery.beers, function(beer){
@@ -62,6 +64,7 @@ function addReviewCount(brewery){
             brewery.avgRating = brewery.avgRating/brewery.reviewCount;
             brewery.avgRating = ratingDisp(brewery.avgRating);
         });
+    if (arr) {return ret;} else {return ret[0];}
 }
 
 function distance(origin, locs, res) {
