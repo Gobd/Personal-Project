@@ -34,7 +34,7 @@ module.exports = {
         .deepPopulate('reviews.beerId.brewery')
         .exec(function (err, resp) {
           err ? res.status(500).json(err) : res.status(200).json(resp);
-        })
+        });
   },
 
   putApiMe: function(req, res) {
@@ -44,8 +44,9 @@ module.exports = {
           message: 'User not found'
         });
       }
-      user.displayName = req.body.displayName || user.displayName;
-      user.email = req.body.email || user.email;
+      user.home = req.body.home;
+      user.displayName = req.body.displayName;
+      user.email = req.body.email;
       user.save(function(err) {
         res.status(200).end();
       });

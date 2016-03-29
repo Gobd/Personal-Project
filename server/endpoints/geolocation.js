@@ -309,7 +309,6 @@ module.exports = {
         });
     },
 
-    //need to find ref on user and beer to delete
     deleteReview: function (req, res) {
         Review.findById(req.params.id, function(err, resp){
             if (err){
