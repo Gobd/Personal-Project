@@ -28,7 +28,7 @@
         <button ng-show="beer.reviews.length" type="button" ng-click="showReviews = !showReviews">Show Reviews</button>
         <div ng-if="!beer.reviews.length">No Reviews!</div>
         <div ng-if="showReviews" ng-repeat="review in beer.reviews">
-            {{review.userId.displayName}} --- {{review.review}} --- review rating
+            {{review.userId.displayName}} --- {{review.review}} --- {{review.rating}}
         </div>
 
         <button ng-if="auth" type="button" ng-click="beer.addReview = !beer.addReview">Add Review</button>
