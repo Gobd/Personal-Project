@@ -44,12 +44,58 @@ h4
 .md-errors-spacer
   display none
 
+bp1 = 1400px
+starcolor = tomato
+
+md-card-title
+  md-card-title-media
+    margin-right 10px
+  md-card-title-text
+    .md-headline
+      color red
+    .md-subhead
+      span
+       font-size 70%
+
 body
-  padding 15px
+  ui-view
+    div#rand-cont
+      width 90%
+      margin 0 auto
+      +below(bp1)
+        width 80%
+      div
+        &.rand-half1
+          unstack()
+          col(1/2)
+          +below(bp1)
+            stack()
+          h1
+            text-align center
+        &.rand-half2
+          unstack()
+          col(1/2)
+          +below(bp1)
+            stack()
+          h1
+            text-align center
+
+
+body
+  a
+    &:link
+      text-decoration none
+    &:visited
+      color red
+    &:hover
+      color black
   .starfull
-    color orange
+    color starcolor
     -webkit-text-stroke-width 3px
     -webkit-text-stroke-color black
+  div#topdircont
+    width 100%
+    background-color royalblue
   span.fa-stack.fa-1x
     outline none
     i
@@ -57,18 +103,18 @@ body
         &.fa-star.color
           outline none
           margin -7px 0px 0 -2px
-          color orange
+          color starcolor
         &.fa-star-o.fa-stack-2x
           outline none
           margin -7px 0px 0 -2px
 .cont
-  margin-top 15px
   display flex
   flex-direction column
   max-width 1000px
   margin 0 auto
   #search
     form
+      margin-bottom 35px
       display flex
       flex-direction column
       align-items center
@@ -76,7 +122,7 @@ body
       width 100%
       md-input-container
         width 60%
-        +below(625px)
+        +below(675px)
           width 100%
       input
         margin-right 15px

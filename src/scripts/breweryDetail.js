@@ -1,10 +1,8 @@
 angular.module('app')
-    .controller('breweryDetail', function($scope, locationService, $stateParams, $rootScope) {
+    .controller('breweryDetail', function($scope, locationService, $stateParams, $rootScope, detail) {
         $rootScope.showsearchscope = false;
 
-        locationService.breweryDetail($stateParams).then(function(res){
-            $scope.detail = res.data;
-        });
+        $scope.detail = detail;
 
         $scope.addBeer = function(beerToAdd){
             beerToAdd.brewery = $scope.detail._id;

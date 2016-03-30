@@ -56,7 +56,14 @@ angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'sa
         .state('breweryDetail', {
             url: '/breweryDetail/:id?near',
             controller: 'breweryDetail',
-            templateUrl: 'partials/breweryDetail.html'
+            templateUrl: 'partials/breweryDetail.html',
+            resolve: {
+                detail: function(locationService, $stateParams){
+                    return locationService.breweryDetail($stateParams).then(function(res){
+                        return res.data;
+                    });
+                }
+            }
         });
 
       function skipIfLoggedIn($q, $auth) {

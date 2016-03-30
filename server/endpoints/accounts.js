@@ -19,6 +19,18 @@ function createJWT(user) {
   return jwt.encode(payload, config.TOKEN_SECRET, 'HS256');
 }
 
+function ratingDisp(rat){
+  var ret = [];
+  for (var i = 1; i <= Math.round(rat); i++) {
+    if (rat % 1 === 0 || i < rat){
+      ret.push(0);
+    } else {
+      ret.push(1);
+    }
+  }
+  return ret;
+}
+
 module.exports = {
 
   addHome: function(req, res, next){
@@ -32,7 +44,11 @@ module.exports = {
     User
         .findById(req.user)
         .deepPopulate('reviews.beerId.brewery')
+        .lean()
         .exec(function (err, resp) {
+          _.forEach(resp.reviews, function(obj){
+            obj.rating = ratingDisp(obj.rating);
+          });
           err ? res.status(500).json(err) : res.status(200).json(resp);
         });
   },

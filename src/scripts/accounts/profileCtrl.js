@@ -2,6 +2,19 @@ angular.module('app')
   .controller('profileCtrl', function($scope, $auth, toastr, Account, locationService) {
       $scope.showsearchscope = false;
 
+      $scope.ratingFunc = function(idx){
+          $scope.ratings[5] = idx+1;
+          for (var i = 1; i < $scope.ratings.length-1; i++) {
+              if (i <= idx) {
+                  if (!$scope.ratings[i].isActive) {
+                      $scope.ratings[i].isActive = true;
+                  }
+              } else {
+                  $scope.ratings[i].isActive = false;
+              }
+          }
+      };
+
       $scope.getProfile = function() {
       Account.getProfile()
         .then(function(response) {

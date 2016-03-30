@@ -53,8 +53,18 @@
 <!--ng-click="editReview(editedReview, review._id)"-->
 
 <div ng-repeat="review in user.reviews">
-  <div ng-click="showEditReview = !showEditReview">{{review.beerId.brewery.name}} --- {{review.beerId.name}} --- {{review.beerId.ibu}} --- {{review.beerId.srm}} --- {{review.review}}</div>
-  <form ng-if="showEditReview" name="EditReviewForm" ng-submit="editReview(editedReview, review._id)">
+  <div ng-click="showEditReview = !showEditReview">{{review.beerId.brewery.name}} --- {{review.beerId.name}} --- {{review.beerId.ibu}} --- {{review.beerId.srm}} ---
+                <span ng-repeat="rating in review.rating track by $index">
+                <span ng-if="!rating.isActive && $index<5" ng-click="ratingFunc($index)">
+                    <i class="fa fa-star-o fa-2x"></i>
+                </span>
+                <span ng-if="rating.isActive && $index<5" ng-click="ratingFunc($index)" class="fa-stack fa-1x">
+                   <i class="fa fa-star color fa-stack-2x"></i>
+                  <i class="fa fa-star-o fa-stack-2x"></i>
+                </span>
+            </span>
+  </div>
+    <form ng-if="showEditReview" name="EditReviewForm" ng-submit="editReview(editedReview, review._id)">
     <input ng-model="editedReview.review" type="text">
     <button class="btn btn-default" type="submit">Submit</button>
   </form>

@@ -1,8 +1,17 @@
-<brewery-dir ng-if="search.name || (!search.name  && !search.beer)" ng-repeat="brewery in breweries track by $index"></brewery-dir>
-
+<brewery-dir ng-if="search.name" ng-repeat="brewery in breweries track by $index"></brewery-dir>
 <beer-dir ng-if="search.beer" ng-repeat="brewery in breweries track by $index"></beer-dir>
 
-<beer-dir ng-if="beers[0] === 'true' && $index > 0 && !search.name  && !search.beer" ng-repeat="beer in beers | limitTo : 6 track by $index"></beer-dir>
+
+<div id="rand-cont" ng-if="!search.name  && !search.beer && beers[0] === 'true'">
+        <div class="rand-half1">
+            <h1>Breweries near you</h1>
+            <brewery-dir ng-repeat="brewery in breweries track by $index"></brewery-dir>
+        </div>
+        <div class="rand-half2">
+            <h1>Beers near you</h1>
+            <beer-dir ng-if="$index > 0" ng-repeat="beer in beers | limitTo : 6 track by $index"></beer-dir>
+        </div>
+</div>
 
 <div ng-if="search.name && !breweries.length">
     No breweries found, would you like to <a href="/#/addBrewery">add one?</a>

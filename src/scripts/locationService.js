@@ -79,7 +79,6 @@ angular.module('app')
 
     this.getBrewery = function(brewery) {
       if (brewery) {
-          console.log('hey')
           $location.url("/home").search(brewery);
         return $http({
           method: 'GET',

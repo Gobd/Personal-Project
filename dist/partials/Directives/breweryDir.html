@@ -9,7 +9,7 @@
                     <a ng-if="!detail" ui-sref="breweryDetail({id: brewery.name, near: search.location})">{{brewery.name}}</a>
                     <a ng-if="detail">{{detail.name}}</a>
                 </span>
-                <span class="md-subhead">Rating:
+                <span class="md-subhead">
                     <span ng-repeat="rating in detail.avgRating || brewery.avgRating track by $index">
                         <i ng-if="!rating" class="fa fa-star fa-3x starfull"></i>
                         <i ng-if="rating" class="fa fa-star-half fa-3x starfull"></i>
