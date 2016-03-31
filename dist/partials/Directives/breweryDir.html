@@ -19,6 +19,7 @@
                 <span class="md-subhead"><ng-pluralize count='brewery.reviewCount' when="{'0': 'No Beer Reviews','1': '1 Beer Review','other': '{{brewery.reviewCount}} Beer Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead">{{brewery.address || detail.address}}</span>
                 <span class="md-subhead">{{brewery.travelTime || detail.travelTime}} away</span>
+                <div ng-if="detail"><button ng-click="detail.editBrewery = !detail.editBrewery">Edit Brewery</button></div>
             </md-card-title-text>
             <md-card-title-text class="title2">
                 <span class="md-subhead">phone</span>
@@ -33,4 +34,7 @@
             </md-card-title-text>
         </md-card-title>
     </md-card>
+    <div ng-if="detail && detail.editBrewery">
+        {{detail}}
+    </div>
 </div>

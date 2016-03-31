@@ -39,7 +39,8 @@ function ratingDisp(rat){
     return ret;
 }
 
-function addReviewCount(brewery, beerCheck = false){
+function addReviewCount(brewery, beerCheck){
+    if (!arguments[1]){beerCheck = false;}
     var arr = true;
     if (beerCheck) {
         return _.forEach(brewery, function(beer){
