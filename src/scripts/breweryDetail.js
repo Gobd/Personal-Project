@@ -14,6 +14,10 @@ angular.module('app')
             });
         };
 
-
+        $scope.editBrewery = function(editBrewery, id){
+            locationService.editBrewery(editBrewery, id).then(function(res){
+                console.log(res.data);
+            });
+        };
 
     });

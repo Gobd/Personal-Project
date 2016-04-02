@@ -77,6 +77,14 @@ angular.module('app')
           });
       };
 
+      this.editBrewery = function(edit, id){
+          return $http({
+              method: 'PUT',
+              data: edit,
+              url: 'http://localhost:3001/editBrewery/' + id
+          });
+      };
+
     this.getBrewery = function(brewery) {
       if (brewery) {
           $location.url("/home").search(brewery);

@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('profileCtrl', function($scope, $auth, toastr, Account, locationService) {
-      $scope.showsearchscope = false;
+  .controller('profileCtrl', function($scope, $auth, toastr, Account, locationService, $rootScope) {
+      $rootScope.showsearchscope = false;
 
       $scope.ratingFunc = function(idx){
           $scope.ratings[5] = idx+1;

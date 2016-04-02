@@ -1,8 +1,34 @@
 angular.module('app', ['ngResource', 'ngMessages', 'ngAnimate', 'ui.router', 'satellizer', 'toastr', 'ngMaterial'])
 
-  .config(function($authProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
+    .filter('split', function() {
+        return function (input) {
+            var str = input.split(",");
+            var ret = str[0] + "," + str[1];
+            return ret;
+        };
+    })
 
-    $authProvider.facebook({
+  .config(function($authProvider, $stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider) {
+
+
+      $mdThemingProvider.theme('default').foregroundPalette[3] = "rgba(23,62,67,1)";
+
+      var indigo = $mdThemingProvider.extendPalette('indigo', {
+          '500': '173e43'
+      });
+      $mdThemingProvider.definePalette('indigo', indigo);
+
+      var indigo = $mdThemingProvider.extendPalette('red', {
+          '500': '173e43'
+      });
+      $mdThemingProvider.definePalette('red', indigo);
+
+      $mdThemingProvider.theme('default').primaryPalette('indigo').warnPalette('red');
+
+      $mdThemingProvider.theme('default').foregroundPalette[3] = "rgba(66,66,66,1)";
+
+
+      $authProvider.facebook({
       clientId: '1670205403245071'
     });
 

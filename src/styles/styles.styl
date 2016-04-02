@@ -1,6 +1,14 @@
 @import 'jeet'
 @import 'rupture'
 
+//#6ed3cf
+//#9068be
+//#e1e8f0
+//#e62739
+
+bgcolor = #6ed3cf
+linkcolor = #173e43
+
 //edit()
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
@@ -29,13 +37,11 @@ button.btn.btn-block.btn-google-plus
 h4
   margin-top 15px
   text-align center
-
 @keyframes pulsate {
   0% {transform: scale(0.3, 0.3); opacity: 0.0;}
   50% {opacity: 1.0;}
   100% {transform: scale(1.2, 1.2); opacity: 0.0;}
 }
-
 .grow
   transition all .2s ease-in-out
   &:hover
@@ -86,18 +92,19 @@ body
 body
   a
     &:link
+      color linkcolor
       text-decoration none
     &:visited
-      color red
+      color linkcolor
     &:hover
-      color black
+      color darken(linkcolor, 100%)
   .starfull
     color starcolor
     -webkit-text-stroke-width 3px
     -webkit-text-stroke-color black
   div#topdircont
     width 100%
-    background-color royalblue
+    background-color bgcolor
   span.fa-stack.fa-1x
     outline none
     i

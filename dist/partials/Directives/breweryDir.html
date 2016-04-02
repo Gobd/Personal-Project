@@ -17,13 +17,13 @@
                 </span>
                 <span class="md-subhead"><ng-pluralize count='detail.reviewCount' when="{'0': 'No Beer Reviews','1': '1 Beer Review','other': '{{detail.reviewCount}} Beer Reviews'}"></ng-pluralize></span>
                 <span class="md-subhead"><ng-pluralize count='brewery.reviewCount' when="{'0': 'No Beer Reviews','1': '1 Beer Review','other': '{{brewery.reviewCount}} Beer Reviews'}"></ng-pluralize></span>
-                <span class="md-subhead">{{brewery.address || detail.address}}</span>
+                <span class="md-subhead">{{brewery.address || detail.address | split}}</span>
                 <span class="md-subhead">{{brewery.travelTime || detail.travelTime}} away</span>
                 <div ng-if="detail"><button ng-click="detail.editBrewery = !detail.editBrewery">Edit Brewery</button></div>
             </md-card-title-text>
             <md-card-title-text class="title2">
-                <span class="md-subhead">Phone: {{brewery.phone || detail.phone}}</span>
-                <span ng-if="!detail" class="md-subhead">Today's Hours: {{brewery.hours[day]}}</span>
+                <span class="md-subhead">{{brewery.phone || detail.phone}}</span>
+                <span ng-if="!detail" class="md-subhead">{{days[day]}}: {{brewery.hours[day]}}</span>
                 <span ng-if="detail" class="md-subhead">Mon: {{detail.hours[1]}}</span>
                 <span ng-if="detail" class="md-subhead">Tue: {{detail.hours[2]}}</span>
                 <span ng-if="detail" class="md-subhead">Wed: {{detail.hours[3]}}</span>
@@ -35,6 +35,45 @@
         </md-card-title>
     </md-card>
     <div ng-if="detail && detail.editBrewery">
-        {{detail}}
+        <form method="put" name="editBrew" ng-submit="editBrewery(detail, detail._id)">
+
+            <md-input-container>
+                <label>Name</label>
+                <input class="form-control" type="text" ng-model="detail.name">
+            </md-input-container>
+            <md-input-container>
+                <label>Phone</label>
+                <input class="form-control" type="text" ng-model="detail.phone">
+            </md-input-container>
+            <md-input-container>
+                <label>Mon Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[1]">
+            </md-input-container>
+            <md-input-container>
+                <label>Tue Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[2]">
+            </md-input-container>
+            <md-input-container>
+                <label>Wed Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[3]">
+            </md-input-container>
+            <md-input-container>
+                <label>Thu Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[4]">
+            </md-input-container>
+            <md-input-container>
+                <label>Fri Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[5]">
+            </md-input-container>
+            <md-input-container>
+                <label>Sat Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[6]">
+            </md-input-container>
+            <md-input-container>
+                <label>Sun Hours</label>
+                <input class="form-control" type="text" ng-model="detail.hours[0]">
+            </md-input-container>
+            <md-button type="submit">Submit Changes</md-button>
+        </form>
     </div>
 </div>

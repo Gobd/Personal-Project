@@ -272,28 +272,54 @@ module.exports = {
         });
     },
 
-    addBeer: function(req, res) {
-        var breweryId = req.body.brewery;
-        Beer.create(req.body, function(err, resp){
-            if (err) {res.status(500).json(err);} else {
-                var beerId = resp._id;
-                Location.findByIdAndUpdate(breweryId, {$push: {beers: beerId}}, function(err, resp){
-                    err ? res.status(500).json(err) : res.status(200).json(resp);
-                });
-            }
+    editBrewery: function (req, res) {
+        Location.findByIdAndUpdate(req.params.id, req.body, function(err, resp){
+            err ? res.status(500).json(err) : res.status(200).json(resp);
         });
     },
 
+    addBeer: function(req, res) {
+        var newBeer = new Beer(req.body),
+            saveBeer = newBeer.save(),
+            locationBeer = Location.findByIdAndUpdate(req.body.brewery, {$push: {beers: newBeer._id}});
+        join(saveBeer, locationBeer, function(beer, location){
+            return [beer, location];
+        })
+            .then(function(resp){
+                res.status(200).json(resp);
+            })
+            .catch(function(err){
+                res.status(500).json(err);
+            });
+    },
+
+    // addReview: function(req, res){
+    //     req.body.userId = req.user;
+    //     Review.create(req.body, function(err, resp){
+    //         var reviewId = resp._id;
+    //         Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
+    //             User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){
+    //                 err ? res.status(500).json(err) : res.status(200).json(resp);
+    //             });
+    //         });
+    //     });
+    // },
+
     addReview: function(req, res){
         req.body.userId = req.user;
-        Review.create(req.body, function(err, resp){
-            var reviewId = resp._id;
-            Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
-                User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){
-                    err ? res.status(500).json(err) : res.status(200).json(resp);
-                });
+        var newReview = new Review(req.body),
+            saveReview = newReview.save(),
+            beerUpdate = Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: newReview._id}}),
+            userUpdate = User.findByIdAndUpdate(req.user, {$push: {reviews: newReview._id}});
+        join(saveReview, beerUpdate, userUpdate, function(review, beer, user){
+            return [review, beer, user];
+        })
+            .then(function(resp){
+                res.status(200).json(resp);
+            })
+            .catch(function(err){
+                res.status(500).json(err);
             });
-        });
     },
 
     editReview: function (req, res) {
