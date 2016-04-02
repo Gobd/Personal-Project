@@ -241,29 +241,22 @@ module.exports = {
     },
 
     breweryDetail: function(req, res){
-        var location = false;
-        if (req.query.near){
-            location = req.query.near;
-        }
+        var location = false,
+            search;
+        if (req.query.near){location = req.query.near;}
         if(mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Location
-                .findById(req.params.id)
-                .deepPopulate('beers.reviews.userId')
-                .lean()
-                .exec(function (err, resp) {
-                    var ret = addReviewCount(resp);
-                    err ? res.status(500).json(err) : distance(location, ret, res);
-                });
+            search = {_id: req.params.id};
         } else {
+            search = {name: req.params.id};
+        }
             Location
-                .findOne({name: req.params.id})
+                .findOne(search)
                 .deepPopulate('beers.reviews.userId')
                 .lean()
                 .exec(function (err, resp) {
                     var ret = addReviewCount(resp);
                     err ? res.status(500).json(err) : distance(location, ret, res);
                 });
-        }
     },
 
     addBrewery: function (req, res) {
@@ -292,18 +285,6 @@ module.exports = {
                 res.status(500).json(err);
             });
     },
-
-    // addReview: function(req, res){
-    //     req.body.userId = req.user;
-    //     Review.create(req.body, function(err, resp){
-    //         var reviewId = resp._id;
-    //         Beer.findByIdAndUpdate(req.body.beerId, {$push: {reviews: reviewId}}, function(err, resp){
-    //             User.findByIdAndUpdate(req.user, {$push: {reviews: reviewId}}, function(err, resp){
-    //                 err ? res.status(500).json(err) : res.status(200).json(resp);
-    //             });
-    //         });
-    //     });
-    // },
 
     addReview: function(req, res){
         req.body.userId = req.user;
@@ -341,14 +322,18 @@ module.exports = {
             if (err){
                 res.status(200).json(err);
             } else if ((req.user).toString() === (resp.userId).toString()) {
-                var reviewRemove = resp.remove;
+                var reviewRemove = resp.remove();
                 var beerRemove = Beer.findByIdAndUpdate(resp.beerId, {$pull:{reviews:req.params.id}});
                 var userRemove = User.findByIdAndUpdate(resp.userId, {$pull:{reviews:req.params.id}});
                 join(reviewRemove, beerRemove, userRemove, function(user, beer, review){
                     return [user, beer, review];
-                }).then(function(resp){
+                })
+                    .then(function(resp){
                     res.status(200).json(resp);
-                });
+                })
+                    .catch(function(err){
+                        res.statis(500).json(err);
+                    });
             } else {
                 res.status(500).json('Not Auth');
             }
