@@ -65,7 +65,7 @@ function checkRole(role) {
     var token = req.header('Authorization').split(' ')[1];
     var payload = null;
     try {
-      payload = jwt.decode(token, config.TOKEN_SECRET, 'HS256');
+      payload = jwt.decode(token, config.TOKEN_SECRET, false, 'HS256');
     } catch (err) {
       return res.status(401).send({
         message: err.message

@@ -5,6 +5,9 @@ angular.module('app').directive('breweryDir', function () {
         templateUrl: './partials/Directives/breweryDir.html',
         controller: function($scope, locationService){
 
+            var date = new Date();
+            $scope.day = date.getDay();
+
             $scope.editBrewery = function(breweryEdit){
                 if (breweryEdit.address) {
                     breweryAdd.loc = {};

@@ -22,15 +22,15 @@
                 <div ng-if="detail"><button ng-click="detail.editBrewery = !detail.editBrewery">Edit Brewery</button></div>
             </md-card-title-text>
             <md-card-title-text class="title2">
-                <span class="md-subhead">phone</span>
-                <span ng-if="!detail" class="md-subhead">hours for current day</span>
-                <span ng-if="detail" class="md-subhead">mon hours</span>
-                <span ng-if="detail" class="md-subhead">tues hours</span>
-                <span ng-if="detail" class="md-subhead">wed hours</span>
-                <span ng-if="detail" class="md-subhead">thur hours</span>
-                <span ng-if="detail" class="md-subhead">fri hours</span>
-                <span ng-if="detail" class="md-subhead">sat hours</span>
-                <span ng-if="detail" class="md-subhead">sun hours</span>
+                <span class="md-subhead">Phone: {{brewery.phone || detail.phone}}</span>
+                <span ng-if="!detail" class="md-subhead">Today's Hours: {{brewery.hours[day]}}</span>
+                <span ng-if="detail" class="md-subhead">Mon: {{detail.hours[1]}}</span>
+                <span ng-if="detail" class="md-subhead">Tue: {{detail.hours[2]}}</span>
+                <span ng-if="detail" class="md-subhead">Wed: {{detail.hours[3]}}</span>
+                <span ng-if="detail" class="md-subhead">Thu: {{detail.hours[4]}}</span>
+                <span ng-if="detail" class="md-subhead">Fri: {{detail.hours[5]}}</span>
+                <span ng-if="detail" class="md-subhead">Sat: {{detail.hours[6]}}</span>
+                <span ng-if="detail" class="md-subhead">Sun: {{detail.hours[0]}}</span>
             </md-card-title-text>
         </md-card-title>
     </md-card>

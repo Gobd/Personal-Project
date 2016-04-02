@@ -5,11 +5,16 @@
         <h2 class="text-center">Sign in</h2>
         <form method="post" ng-submit="login()" name="loginForm">
           <div class="form-group has-feedback">
-            <input class="form-control input-lg" type="text" name="email" ng-model="user.email" placeholder="Email" required autofocus>
-            <span class="ion-at form-control-feedback"></span>
+            <md-input-container>
+              <label>User/Email</label>
+              <input ng-model="user.email" required autofocus>
+            </md-input-container>            <span class="ion-at form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input class="form-control input-lg" type="password" name="password" ng-model="user.password" placeholder="Password" required>
+            <md-input-container>
+              <label>Password</label>
+              <input ng-model="user.password">
+            </md-input-container>
             <span class="ion-key form-control-feedback"></span>
           </div>
           <button type="submit" ng-disabled="loginForm.$invalid" class="btn btn-block btn-login"><i class="fa fa-user"></i>Log in</button>
@@ -32,3 +37,6 @@
     </div>
   </div>
 </div>
+
+
+

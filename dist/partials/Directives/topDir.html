@@ -2,11 +2,11 @@
 
 <div id="nav">
   <ul>
-    <li class="grow"><a href="/#/" ng-click="goHome()"><img src="beer.png"></a></li>
+    <li><a href="/#/" ng-click="goHome()">Brewview</a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/login">Login</a></li>
     <li ng-if="!isAuthenticated()"><a href="/#/signup">Sign up</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-    <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
+
     <li id="compasspadding" ng-if="isAuthenticated()"><a href="/#/addBrewery">Add Brewery</a></li>
 <i id="compass" ng-click="nearMe()" class="fa fa-compass fa-lg grow"></i>
       <li id="locationLi">
@@ -15,18 +15,19 @@
           <input id="location" ng-model="search.location">
         </md-input-container></li>
       <li><i ng-click="showsearch = !showsearch" class="fa fa-search fa-2x grow"></i></li>
+    <li ng-if="isAuthenticated()"><a href="/#/logout">Logout</a></li>
   </ul>
 </div>
 
   <div ng-if="showsearch" id="search">
     <form name="searchForm">
       <md-input-container>
-        <label>Search by brewery...</label>
+        <label>Find a brewery...</label>
         <input ng-disabled="search.beer.length > 0" class="form-control" type="text" ng-model="search.name" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }'>
       </md-input-container>
 
       <md-input-container>
-        <label>Search by beer...</label>
+        <label>Find a beer...</label>
         <input ng-disabled="search.name.length > 0" class="form-control" type="text" ng-model="search.beer" ng-change="getBrewery(search)" ng-model-options='{ debounce: 250 }'>
       </md-input-container>
     </form>

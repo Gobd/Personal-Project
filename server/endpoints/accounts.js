@@ -160,7 +160,7 @@ module.exports = {
               });
             }
             var token = req.header('Authorization').split(' ')[1];
-            var payload = jwt.decode(token, config.TOKEN_SECRET, 'HS256' );
+            var payload = jwt.decode(token, config.TOKEN_SECRET, false, 'HS256' );
             User.findById(payload.sub, function(err, user) {
               if (!user) {
                 return res.status(400).send({
@@ -253,7 +253,7 @@ module.exports = {
               });
             }
             var token = req.header('Authorization').split(' ')[1];
-            var payload = jwt.decode(token, config.TOKEN_SECRET, 'HS256');
+            var payload = jwt.decode(token, config.TOKEN_SECRET, false, 'HS256');
             User.findById(payload.sub, function(err, user) {
               if (!user) {
                 return res.status(400).send({

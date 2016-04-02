@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('loginCtrl', function($scope, $location, $auth, toastr) {
-      $scope.showsearchscope = false;
+  .controller('loginCtrl', function($scope, $location, $auth, toastr, $rootScope) {
+      $rootScope.showsearchscope = false;
     $scope.login = function() {
       $auth.login($scope.user)
         .then(function() {
